@@ -7,9 +7,7 @@ import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.entity.Result;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.service.CheckItemService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class CheckItemController {
      *
      * @return 查询的结果
      */
-    @RequestMapping("/findAll")
+    @GetMapping("/findAll")
     public Result findAll() {
         try {
             List<CheckItem> checkItemList = checkItemService.findAll();
@@ -46,7 +44,7 @@ public class CheckItemController {
      *
      * @param checkItem 检查项信息
      */
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public Result add(@RequestBody CheckItem checkItem) {
         try {
             checkItemService.add(checkItem);
@@ -63,14 +61,24 @@ public class CheckItemController {
      * @param queryPageBean 分页查询条件
      * @return 分页查询结果
      */
-    @RequestMapping("/page")
-    Result findByPage(@RequestBody QueryPageBean queryPageBean) {
+    @PostMapping("/page")
+    public Result findByPage(@RequestBody QueryPageBean queryPageBean) {
         try {
             PageResult result = checkItemService.findByPage(queryPageBean);
-            return new Result(true,MessageConstant.QUERY_CHECKGROUP_SUCCESS,result);
+            return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, result);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,MessageConstant.QUERY_CHECKGROUP_FAIL);
+            return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
+        }
+    }
+
+    @GetMapping("/delete")
+    public Result deleteById(@RequestParam("id") Integer id) {
+        try {
+            checkItemService.deleteById(id);
+            return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
+        } catch (Exception e) {
+            return new Result(false, MessageConstant.DELETE_CHECKITEM_FAIL);
         }
     }
 }

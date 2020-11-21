@@ -30,4 +30,10 @@
     <select id="findTotal" resultType="long">
         select count(*) from t_checkitem
     </select>
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkitem where id = #{id}
+    </delete>
+    <select id="findByCheckItemIdAndCheckGroupCount" parameterType="int" resultType="int">
+        select count(*) from t_checkgroup_checkitem tc where tc.checkitem_id = #{id}
+    </select>
 </mapper>

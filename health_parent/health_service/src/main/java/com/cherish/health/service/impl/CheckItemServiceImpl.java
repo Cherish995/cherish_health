@@ -6,6 +6,7 @@ import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.service.CheckItemService;
+import com.cherish.health.service.exception.HealthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @version 1.8.0_121
  * @date 2020/11/21
  */
-@Service
+@Service(interfaceClass = CheckItemService.class)
 public class CheckItemServiceImpl implements CheckItemService {
     @Autowired
     private CheckItemDao checkItemDao;
@@ -36,7 +37,7 @@ public class CheckItemServiceImpl implements CheckItemService {
      *
      * @param checkItem 检查项信息
      */
-//    @Transactional
+    @Transactional
     @Override
     public void add(CheckItem checkItem) {
         checkItemDao.add(checkItem);
@@ -54,5 +55,24 @@ public class CheckItemServiceImpl implements CheckItemService {
         Long total = checkItemDao.findTotal();
         PageResult<CheckItem> result = new PageResult<>(total, checkItemList);
         return result;
+    }
+
+    /**
+     * 根据检查项id删除检查项信息
+     *
+     * @param id 对应检查项的id
+     */
+    @Transactional
+    @Override
+    public void deleteById(Integer id) {
+        // 先判断检查项有没有对应的检查组
+        int total = checkItemDao.findByCheckItemIdAndCheckGroupCount(id);
+        if (total > 0) {
+            // 不可以删除
+            throw new HealthException("亲、不可以删除的了");
+        } else {
+            // 可以删除
+            checkItemDao.deleteById(id);
+        }
     }
 }

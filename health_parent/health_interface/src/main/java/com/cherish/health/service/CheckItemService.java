@@ -33,4 +33,11 @@ public interface CheckItemService {
      * @return 分页查询结果
      */
     PageResult findByPage(QueryPageBean queryPageBean);
+
+    /**
+     * 根据id删除检查项信息
+     *
+     * @param id 对应检查项的id
+     */
+    void deleteById(Integer id);
 }

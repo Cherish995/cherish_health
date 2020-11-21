@@ -39,4 +39,19 @@ public interface CheckItemDao {
      * @return 分页查询结果
      */
     Long findTotal();
+
+    /**
+     * 根据id删除检查项信息
+     *
+     * @param id 对应检查项的id
+     */
+    void deleteById(Integer id);
+
+    /**
+     * 根据检查项id查询对应的检查组的个数
+     *
+     * @param id 检查项id
+     * @return 检查项对应的检查组的个数
+     */
+    Integer findByCheckItemIdAndCheckGroupCount(Integer id);
 }

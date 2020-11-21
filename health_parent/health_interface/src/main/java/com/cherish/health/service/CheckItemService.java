@@ -1,5 +1,7 @@
 package com.cherish.health.service;
 
+import com.cherish.health.entity.PageResult;
+import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckItem;
 
 import java.util.List;
@@ -23,4 +25,12 @@ public interface CheckItemService {
      * @param checkItem 检查项信息
      */
     void add(CheckItem checkItem);
+
+    /**
+     * 分页查询检查项信息
+     *
+     * @param queryPageBean 分页查询条件
+     * @return 分页查询结果
+     */
+    PageResult findByPage(QueryPageBean queryPageBean);
 }

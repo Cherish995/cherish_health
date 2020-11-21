@@ -2,6 +2,8 @@ package com.cherish.health.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.cherish.health.constant.MessageConstant;
+import com.cherish.health.entity.PageResult;
+import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.entity.Result;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.service.CheckItemService;
@@ -52,6 +54,23 @@ public class CheckItemController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, MessageConstant.ADD_CHECKITEM_FAIL);
+        }
+    }
+
+    /**
+     * 分页查询检查项信息
+     *
+     * @param queryPageBean 分页查询条件
+     * @return 分页查询结果
+     */
+    @RequestMapping("/page")
+    Result findByPage(@RequestBody QueryPageBean queryPageBean) {
+        try {
+            PageResult result = checkItemService.findByPage(queryPageBean);
+            return new Result(true,MessageConstant.QUERY_CHECKGROUP_SUCCESS,result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,MessageConstant.QUERY_CHECKGROUP_FAIL);
         }
     }
 }

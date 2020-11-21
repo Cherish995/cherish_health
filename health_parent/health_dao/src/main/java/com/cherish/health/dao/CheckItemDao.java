@@ -1,5 +1,6 @@
 package com.cherish.health.dao;
 
+import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckItem;
 
 import java.util.List;
@@ -23,4 +24,19 @@ public interface CheckItemDao {
      * @param checkItem 检查项信息
      */
     void add(CheckItem checkItem);
+
+    /**
+     * 分页查询检查项信息
+     *
+     * @param queryPageBean 分页查询条件
+     * @return 分页查询结果
+     */
+    List<CheckItem> findByPage(QueryPageBean queryPageBean);
+
+    /**
+     * 查询数据总条数
+     *
+     * @return 分页查询结果
+     */
+    Long findTotal();
 }

@@ -230,7 +230,10 @@
         },
         //钩子函数，VUE对象初始化完成后自动执行
         created() {
-            this.findAll();
+            // 查询所有检查项信息
+            // this.findAll();
+            // 分页查询检查项信息
+            this.findPage();
         },
         methods: {
             //查询所有检查项信息
@@ -251,6 +254,7 @@
                         })
                     }
                 })
+
             },
             //编辑
             handleEdit() {
@@ -274,7 +278,8 @@
                                 this.dialogFormVisible = false;
 
                                 // 刷新页面信息
-                                this.findAll();
+                                // this.findAll();
+                                this.findPage();
                             } else {
                                 // 添加失败
                                 this.$message({
@@ -292,6 +297,21 @@
             },
             //分页查询
             findPage() {
+                // 发送异步请求
+                axios.post("/checkitem/page.do", this.pagination).then(response => {
+                    if (response.data.flag) {
+                        // 查询成功
+                        this.dataList = response.data.data.rows;
+                        // 总计录数
+                        this.pagination.total=response.data.data.total;
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: response.data.message,
+                            showClose: true
+                        })
+                    }
+                })
             },
             // 重置表单
             resetForm() {
@@ -307,6 +327,10 @@
             },
             //切换页码
             handleCurrentChange(currentPage) {
+                // 更新当前页数
+                this.pagination.currentPage = currentPage;
+                // 更新请求
+                this.findPage();
             },
             // 删除
             handleDelete(row) {

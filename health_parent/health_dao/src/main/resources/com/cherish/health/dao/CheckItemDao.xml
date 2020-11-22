@@ -27,8 +27,9 @@
         <include refid="queryCondition"/>
         limit #{offset},#{pageSize}
     </select>
-    <select id="findTotal" resultType="long">
+    <select id="findTotal" parameterType="QueryPageBean" resultType="long">
         select count(*) from t_checkitem
+        <include refid="queryCondition"/>
     </select>
     <delete id="deleteById" parameterType="int">
         delete from t_checkitem where id = #{id}
@@ -36,4 +37,8 @@
     <select id="findByCheckItemIdAndCheckGroupCount" parameterType="int" resultType="int">
         select count(*) from t_checkgroup_checkitem tc where tc.checkitem_id = #{id}
     </select>
+    <update id="update" parameterType="checkitem">
+        update t_checkitem set name =#{name} ,sex = #{sex},age = #{age},price = #{price},
+        type = #{type},remark = #{remark},attention = #{attention} where id = #{id}
+    </update>
 </mapper>

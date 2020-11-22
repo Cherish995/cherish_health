@@ -51,8 +51,11 @@ public class CheckItemServiceImpl implements CheckItemService {
      */
     @Override
     public PageResult findByPage(QueryPageBean queryPageBean) {
-        List<CheckItem> checkItemList = checkItemDao.findByPage(queryPageBean);
-        Long total = checkItemDao.findTotal();
+        Long total = checkItemDao.findTotal(queryPageBean);
+        List<CheckItem> checkItemList = null;
+        if (total > 0) {
+            checkItemList = checkItemDao.findByPage(queryPageBean);
+        }
         PageResult<CheckItem> result = new PageResult<>(total, checkItemList);
         return result;
     }
@@ -74,5 +77,16 @@ public class CheckItemServiceImpl implements CheckItemService {
             // 可以删除
             checkItemDao.deleteById(id);
         }
+    }
+
+    /**
+     * 修改检查项信息
+     *
+     * @param checkItem 更新的检查项信息
+     */
+    @Transactional
+    @Override
+    public void update(CheckItem checkItem) {
+        checkItemDao.update(checkItem);
     }
 }

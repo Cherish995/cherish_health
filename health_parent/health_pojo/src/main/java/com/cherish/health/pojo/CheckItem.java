@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class CheckItem implements Serializable {
 
+
     private Integer id;//主键
     private String code;//项目编码
     private String name;//项目名称

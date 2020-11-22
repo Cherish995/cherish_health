@@ -30,7 +30,7 @@
             <div class="filter-container">
                 <el-input placeholder="项目编码/项目名称" v-model="pagination.queryString" style="width: 200px;"
                           class="filter-item"></el-input>
-                <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                <el-button @click="handleCurrentChange(1)" class="dalfBut">查询</el-button>
                 <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
             </div>
             <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -258,7 +258,34 @@
 
             },
             //编辑
-            handleEdit() {
+            handleEdit(dataEditForm) {
+                // 校验表单
+                this.$refs[dataEditForm].validate((valid) => {
+                    // 校验表单成功
+                    if (valid) {
+                        axios.post("/checkitem/update.do", this.formData).then(response => {
+                            if (response.data.flag) {
+                                this.$message({
+                                    type: "success",
+                                    message: response.data.message,
+                                    showClose: true
+                                })
+                                // 隐藏编辑框
+                                this.dialogFormVisible4Edit = false;
+                                this.handleCurrentChange(1);
+                            } else {
+                                this.$message({
+                                    type: "error",
+                                    message: response.data.message,
+                                    showClose: true
+                                })
+                            }
+                        })
+                    } else {
+                        // ignore
+                    }
+                })
+
             },
             //添加
             handleAdd(dataAddForm) {
@@ -280,7 +307,7 @@
 
                                 // 刷新页面信息
                                 // this.findAll();
-                                this.findPage();
+                                this.handleCurrentChange(1);
                             } else {
                                 // 添加失败
                                 this.$message({
@@ -298,6 +325,7 @@
             },
             //分页查询
             findPage() {
+                let page = this.pagination;
                 // 发送异步请求
                 axios.post("/checkitem/page.do", this.pagination).then(response => {
                     if (response.data.flag) {
@@ -325,6 +353,12 @@
             },
             // 弹出编辑窗口
             handleUpdate(row) {
+                // 重置表单
+                this.resetForm();
+                // 数据回显
+                this.formData = row;
+                // 弹框
+                this.dialogFormVisible4Edit = true;
             },
             //切换页码
             handleCurrentChange(currentPage) {
@@ -336,8 +370,12 @@
             // 删除
             handleDelete(row) {
                 // 弹出删除确认框
-                if (confirm("你确定要删除" + row.name + "检查项吗?")) {
-                    // 确认删除
+                this.$confirm('你确定要删除' + row.name + '检查项吗?', '注意', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    // alert(111);
                     axios.get("/checkitem/delete.do?id=" + (row.id)).then(response => {
                         if (response.data.flag) {
                             // 删除成功 刷新页面
@@ -346,7 +384,7 @@
                                 message: response.data.message,
                                 showClose: true
                             })
-                            this.findPage();
+                            this.handleCurrentChange(1);
                         } else {
                             // 删除失败
                             this.$message({
@@ -356,9 +394,35 @@
                             })
                         }
                     })
-                } else {
-                    // 取消删除
-                }
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+                // if (confirm("你确定要删除" + row.name + "检查项吗?")) {
+                //     // 确认删除
+                //     axios.get("/checkitem/delete.do?id=" + (row.id)).then(response => {
+                //         if (response.data.flag) {
+                //             // 删除成功 刷新页面
+                //             this.$message({
+                //                 type: "success",
+                //                 message: response.data.message,
+                //                 showClose: true
+                //             })
+                //             this.findPage();
+                //         } else {
+                //             // 删除失败
+                //             this.$message({
+                //                 type: "error",
+                //                 message: response.data.message,
+                //                 showClose: true
+                //             })
+                //         }
+                //     })
+                // } else {
+                //     // 取消删除
+                // }
             }
         }
     })

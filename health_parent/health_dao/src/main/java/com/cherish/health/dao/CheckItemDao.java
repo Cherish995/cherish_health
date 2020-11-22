@@ -9,6 +9,9 @@ import java.util.List;
  * @author Cherish
  * @version 1.8.0_121
  * @date 2020/11/21
+ * <p>
+ * 针对处理检查项数据接口
+ * </p>
  */
 public interface CheckItemDao {
     /**
@@ -38,7 +41,7 @@ public interface CheckItemDao {
      *
      * @return 分页查询结果
      */
-    Long findTotal();
+    Long findTotal(QueryPageBean queryPageBean);
 
     /**
      * 根据id删除检查项信息
@@ -54,4 +57,11 @@ public interface CheckItemDao {
      * @return 检查项对应的检查组的个数
      */
     Integer findByCheckItemIdAndCheckGroupCount(Integer id);
+
+    /**
+     * 修改检查项信息
+     *
+     * @param checkItem 更新的检查项信息
+     */
+    void update(CheckItem checkItem);
 }

@@ -72,6 +72,12 @@ public class CheckItemController {
         }
     }
 
+    /**
+     * 删除检查项信息
+     *
+     * @param id 对应检查项id
+     * @return 结果
+     */
     @GetMapping("/delete")
     public Result deleteById(@RequestParam("id") Integer id) {
         try {
@@ -79,6 +85,23 @@ public class CheckItemController {
             return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
         } catch (Exception e) {
             return new Result(false, MessageConstant.DELETE_CHECKITEM_FAIL);
+        }
+    }
+
+    /**
+     * 修改检查项信息
+     *
+     * @param checkItem 更新的检查项信息
+     * @return 结果
+     */
+    @PostMapping("/update")
+    public Result update(@RequestBody CheckItem checkItem) {
+        try {
+            checkItemService.update(checkItem);
+            return new Result(true, MessageConstant.EDIT_CHECKITEM_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.EDIT_CHECKITEM_FAIL);
         }
     }
 }

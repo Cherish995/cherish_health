@@ -10,6 +10,9 @@ import java.util.List;
  * @author Cherish
  * @version 1.8.0_121
  * @date 2020/11/21
+ * <p>
+ * 针对检查项业务功能接口
+ * </p>
  */
 public interface CheckItemService {
     /**
@@ -40,4 +43,11 @@ public interface CheckItemService {
      * @param id 对应检查项的id
      */
     void deleteById(Integer id);
+
+    /**
+     * 修改检查项信息
+     *
+     * @param checkItem 更新的检查项信息
+     */
+    void update(CheckItem checkItem);
 }

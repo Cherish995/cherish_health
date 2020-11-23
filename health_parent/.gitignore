@@ -29,11 +29,5 @@ target
 out
 .gitignore
 .idea/
-health_common/
-health_dao/
-health_interface/
 health_parent.iml
-health_pojo/
-health_service/
-health_web/
-pom.xml
+

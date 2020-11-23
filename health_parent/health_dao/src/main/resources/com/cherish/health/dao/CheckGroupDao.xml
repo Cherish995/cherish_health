@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cherish.health.dao.CheckGroupDao">
+    <sql id="queryCondition">
+        <where>
+            <if test="queryString != null and queryString.length > 0">
+                code like "%"#{queryString}"%" or name like "%"#{queryString}"%" or helpCode like "%"#{queryString}"%"
+            </if>
+        </where>
+    </sql>
+    <insert id="addCheckGroup" parameterType="checkGroup">
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+        insert into t_checkgroup(code,name,helpCode,sex,remark,attention)
+        values (#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+    </insert>
+    <insert id="addCGCI">
+            insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+            values(#{checkGroupId}, #{checkitemId});
+    </insert>
+    <select id="findById" parameterType="int" resultType="checkGroup">
+        select * from t_checkgroup where id = #{id}
+    </select>
+    <select id="findCheckitemIds" parameterType="int" resultType="int">
+        select checkitem_id from t_checkgroup_checkitem tcc where tcc.checkgroup_id = #{id}
+    </select>
+    <select id="findCount" parameterType="queryPageBean" resultType="long">
+        select count(1) from t_checkgroup
+        <include refid="queryCondition"/>
+    </select>
+    <select id="findList" parameterType="queryPageBean" resultType="checkgroup">
+        select * from t_checkgroup
+        <include refid="queryCondition"/>
+        limit #{offset},#{pageSize}
+    </select>
+    <delete id="deleteAllById" parameterType="int">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{id}
+    </delete>
+    <update id="updateCheckGroup" parameterType="checkgroup">
+        update t_checkgroup set code = #{code},name = #{name},
+          helpCode = #{helpCode},sex = #{sex},remark = #{remark},attention = #{attention}
+          where id = #{id}
+    </update>
+    <insert id="updateCheckGroupAndCheckItem">
+        insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+        values (#{cgId},#{ciId})
+    </insert>
+    <select id="findSetmeal" parameterType="int" resultType="long">
+        select count(1) from t_setmeal_checkgroup where checkgroup_id = #{id}
+    </select>
+    <delete id="deleteCheckGroupAndCheckItemById" parameterType="int">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{id}
+    </delete>
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkgroup where id = #{id}
+    </delete>
+    <select id="findAll" resultType="checkGroup">
+        select * from t_checkgroup
+    </select>
+</mapper>

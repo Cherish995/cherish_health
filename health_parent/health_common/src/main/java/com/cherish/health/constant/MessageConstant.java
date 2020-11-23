@@ -30,6 +30,8 @@ public interface MessageConstant {
     static final String PIC_UPLOAD_FAIL = "图片上传失败";
     static final String ADD_SETMEAL_FAIL = "新增套餐失败";
     static final String ADD_SETMEAL_SUCCESS = "新增套餐成功";
+    static final String EDIT_SETMEAL_SUCCESS = "编辑套餐成功";
+    static final String EDIT_SETMEAL_FAIL = "编辑套餐失败";
     static final String IMPORT_ORDERSETTING_FAIL = "批量导入预约设置数据失败";
     static final String IMPORT_ORDERSETTING_SUCCESS = "批量导入预约设置数据成功";
     static final String GET_ORDERSETTING_SUCCESS = "获取预约设置数据成功";
@@ -50,6 +52,7 @@ public interface MessageConstant {
     static final String QUERY_SETMEALLIST_SUCCESS = "查询套餐列表数据成功";
     static final String QUERY_SETMEALLIST_FAIL = "查询套餐列表数据失败";
     static final String QUERY_SETMEAL_SUCCESS = "查询套餐数据成功";
+    static final String DELETE_SETMEAL_SUCCESS = "删除套餐数据成功";
     static final String QUERY_SETMEAL_FAIL = "查询套餐数据失败";
     static final String SEND_VALIDATECODE_FAIL = "验证码发送失败";
     static final String SEND_VALIDATECODE_SUCCESS = "验证码发送成功";

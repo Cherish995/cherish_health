@@ -22,9 +22,11 @@ public class Setmeal implements Serializable {
     public List<CheckGroup> getCheckGroups() {
         return checkGroups;
     }
+
     public void setCheckGroups(List<CheckGroup> checkGroups) {
         this.checkGroups = checkGroups;
     }
+
     public Integer getId() {
         return id;
     }

@@ -32,14 +32,14 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     <!-- 指定应用名称 -->
-    <dubbo:application name="health_web" />
+    <dubbo:application name="health_web"/>
     <!--指定服务注册中心地址-->
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
     <!--批量扫描 dubbo2.6.0下，mvc不需要再扫controller
         2.6.2 则mvc要扫一次controller
 		<context:component-scan/>
     -->
-    <dubbo:annotation package="com.cherish.health.controller" />
+    <dubbo:annotation package="com.cherish.health.controller"/>
     <!--
         超时全局设置 10分钟
         check=false 不检查服务提供方，开发阶段建议设置为false
@@ -49,8 +49,9 @@
     <!--文件上传组件-->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="104857600" />
-        <property name="maxInMemorySize" value="4096" />
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
+    <import resource="classpath:spring-redis.xml"/>
 </beans>

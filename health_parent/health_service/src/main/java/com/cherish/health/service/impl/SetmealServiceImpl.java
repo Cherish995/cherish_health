@@ -1,6 +1,7 @@
 package com.cherish.health.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.dao.SetmealDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
@@ -111,7 +112,7 @@ public class SetmealServiceImpl implements SetmealService {
         // 判断改套餐是否有对应的订单
         Long total = setmealDao.findOrders(id);
         if (total > 0) {
-            throw new HealthException("【套餐已有订单】删除失败");
+            throw new HealthException(MessageConstant.DELETE_SETMEAL_FAIL);
         }
         // 删除套餐关联检查组信息
         setmealDao.deleteCheckGroupIdsBySetmealId(id);

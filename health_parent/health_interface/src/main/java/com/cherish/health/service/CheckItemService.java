@@ -2,6 +2,7 @@ package com.cherish.health.service;
 
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
+import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.CheckItem;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface CheckItemService {
      *
      * @param checkItem 检查项信息
      */
-    void add(CheckItem checkItem);
+    void add(CheckItem checkItem) throws HealthException;
 
     /**
      * 分页查询检查项信息
@@ -42,12 +43,12 @@ public interface CheckItemService {
      *
      * @param id 对应检查项的id
      */
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws HealthException;
 
     /**
      * 修改检查项信息
      *
      * @param checkItem 更新的检查项信息
      */
-    void update(CheckItem checkItem);
+    void update(CheckItem checkItem) throws HealthException;
 }

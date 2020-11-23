@@ -30,13 +30,8 @@ public class CheckItemController {
      */
     @GetMapping("/findAll")
     public Result findAll() {
-        try {
-            List<CheckItem> checkItemList = checkItemService.findAll();
-            return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, checkItemList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
-        }
+        List<CheckItem> checkItemList = checkItemService.findAll();
+        return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, checkItemList);
     }
 
     /**
@@ -46,13 +41,9 @@ public class CheckItemController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody CheckItem checkItem) {
-        try {
-            checkItemService.add(checkItem);
-            return new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, MessageConstant.ADD_CHECKITEM_FAIL);
-        }
+
+        checkItemService.add(checkItem);
+        return new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
     }
 
     /**
@@ -63,13 +54,10 @@ public class CheckItemController {
      */
     @PostMapping("/page")
     public Result findByPage(@RequestBody QueryPageBean queryPageBean) {
-        try {
-            PageResult result = checkItemService.findByPage(queryPageBean);
-            return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
-        }
+
+        PageResult result = checkItemService.findByPage(queryPageBean);
+        return new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, result);
+
     }
 
     /**
@@ -80,12 +68,10 @@ public class CheckItemController {
      */
     @GetMapping("/delete")
     public Result deleteById(@RequestParam("id") Integer id) {
-        try {
-            checkItemService.deleteById(id);
-            return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
-        } catch (Exception e) {
-            return new Result(false, MessageConstant.DELETE_CHECKITEM_FAIL);
-        }
+
+        checkItemService.deleteById(id);
+        return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
+
     }
 
     /**
@@ -96,12 +82,7 @@ public class CheckItemController {
      */
     @PostMapping("/update")
     public Result update(@RequestBody CheckItem checkItem) {
-        try {
-            checkItemService.update(checkItem);
-            return new Result(true, MessageConstant.EDIT_CHECKITEM_SUCCESS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, MessageConstant.EDIT_CHECKITEM_FAIL);
-        }
+        checkItemService.update(checkItem);
+        return new Result(true, MessageConstant.EDIT_CHECKITEM_SUCCESS);
     }
 }

@@ -1,12 +1,13 @@
 package com.cherish.health.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.dao.CheckItemDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.service.CheckItemService;
-import com.cherish.health.service.exception.HealthException;
+import com.cherish.health.exception.HealthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +73,7 @@ public class CheckItemServiceImpl implements CheckItemService {
         int total = checkItemDao.findByCheckItemIdAndCheckGroupCount(id);
         if (total > 0) {
             // 不可以删除
-            throw new HealthException("亲、不可以删除的了");
+            throw new HealthException(MessageConstant.DELETE_CHECKITEM_FAIL);
         } else {
             // 可以删除
             checkItemDao.deleteById(id);

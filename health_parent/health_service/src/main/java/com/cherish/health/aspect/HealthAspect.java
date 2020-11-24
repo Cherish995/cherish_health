@@ -7,11 +7,9 @@ import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.CheckGroup;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.pojo.Setmeal;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -44,23 +44,31 @@ public class HealthAspect {
             // 拿到参数数组
             Object[] args = joinPoint.getArgs();
             if (args == null || args.length == 0) throw new RuntimeException("严重错误!!!");
+            // 获取待更新检查项的信息 参数
             CheckItem checkItem = (CheckItem) args[0];
             Integer id = checkItem.getId();
             if (id == null) throw new RuntimeException("严重错误!!!");
             // 判断检查项是否已被订单使用
             if (isCheckItemUsed(id)) {
+                // 查询到数据库的信息
                 CheckItem old_checkItem = checkItemDao.findById(id);
-                if (old_checkItem == null) throw new RuntimeException();
+                // 查询不到 抛出异常
+                if (old_checkItem == null) throw new RuntimeException("有大问题!!!");
+                // 并未此次更新并未修改任何修改内容 不执行目标方法(切入点)
                 if (old_checkItem.equals(checkItem)) return null;
                 else {
+                    // 修改了不能暂时修改的数据 抛异常给你
                     if (isCheckItemUpdate(old_checkItem, checkItem)) throw new HealthException("已有订单,不能更改");
+                    // 可以修改 执行目标方法
                     return joinPoint.proceed();
                 }
 
             } else {
+                // 可以修改 执行目标方法
                 return joinPoint.proceed();
             }
         } catch (Throwable throwable) {
+            // 将异常自定义处理
             throwable.printStackTrace();
             throw new HealthException(throwable.getMessage());
         }
@@ -88,22 +96,34 @@ public class HealthAspect {
             Integer id = checkGroup.getId();
             // 判断检查组是否已被订单使用
             if (isCheckGroupUsed(id)) {
+                /**
+                 * 【检查组已被订单使用】
+                 */
+                // 得到所有旧的信息
                 CheckGroup old_checkGroup = checkGroupDao.findById(id);
                 List<Integer> old_checkitemIds = checkGroupDao.findCheckitemIds(id);
+                // 判断检查项是否要被修改
                 if (checkitemIds.equals(old_checkitemIds)) {
+                    // 啥也不改 你想干啥 就不给你更新的机会了
                     if (checkGroup.equals(old_checkGroup)) return null;
                 } else {
+                    // 检查项是不能修改的
                     throw new HealthException("已有订单使用,修改失败");
                 }
+                // 判断更新的内容是否是不能被修改的
                 if (isCheckGroupUpdate(old_checkGroup, checkGroup)) {
+                    // 不能修改顾客至上
                     throw new HealthException("已有订单使用,修改失败");
                 }
+                // 你更新吧
                 return joinPoint.proceed();
 
             } else {
+                // 你更新吧
                 return joinPoint.proceed();
             }
         } catch (Throwable throwable) {
+            // 自己处理异常
             throwable.printStackTrace();
             throw new HealthException(throwable.getMessage());
         }
@@ -124,29 +144,40 @@ public class HealthAspect {
             // 拿到检查组信息
             Setmeal setmeal = (Setmeal) args[0];
             if (setmeal == null) throw new RuntimeException("严重错误!!!");
-            // 拿到检查项id数组(可能为null 无需判断)
+            // 拿到检查组id数组(可能为null 无需判断)
             Integer[] ids = (Integer[]) args[1];
             List<Integer> checkgroupIds = Arrays.asList(ids);
 
-            // 判断检查组是否已被订单使用
+            // 判断套餐是否已被订单使用
             Integer id = setmeal.getId();
             if (isSetmealUsed(id)) {
+                /**
+                 * 【套餐已被订单使用】
+                 */
+                // 得到所有旧的信息
                 Setmeal old_setmeal = setmealDao.findById(id);
                 List<Integer> old_checkGroupIds = setmealDao.findCheckGroupIds(id);
+                // 判断检查组是否要被修改
                 if (checkgroupIds.equals(old_checkGroupIds)) {
+                    // 啥也不改 你想干啥 就不给你更新的机会了
                     if (setmeal.equals(old_setmeal)) return null;
                 } else {
+                    // 检查组是不能修改的
                     throw new HealthException("已有订单使用,修改失败");
                 }
-
+                // 判断更新的内容是否是不能被修改的
                 if (isSetmealUpdate(old_setmeal, setmeal)) {
+                    // 不能修改顾客至上
                     throw new HealthException("已有订单使用,修改失败");
                 }
+                // 你更新吧
                 return joinPoint.proceed();
             } else {
+                // 你更新吧
                 return joinPoint.proceed();
             }
         } catch (Throwable throwable) {
+            // 自己处理异常
             throwable.printStackTrace();
             throw new HealthException(throwable.getMessage());
         }
@@ -225,7 +256,7 @@ public class HealthAspect {
     }
 
     /**
-     * 判断是否修改了检查项 目前不能修改的数据
+     * 判断是否要修改检查项表中 目前不能修改的数据
      *
      * @param old_checkItem
      * @param checkItem
@@ -240,7 +271,7 @@ public class HealthAspect {
     }
 
     /**
-     * 判断是否修改了检查项 目前不能修改的数据
+     * 判断是否要修改检查项表中 目前不能修改的数据
      *
      * @param old_checkGroup
      * @param checkGroup
@@ -253,7 +284,7 @@ public class HealthAspect {
     }
 
     /**
-     * 判断是否修改了套餐 目前不能修改的数据
+     * 判断是否要修改套餐表中 目前不能修改的数据
      *
      * @param old_setmeal
      * @param setmeal

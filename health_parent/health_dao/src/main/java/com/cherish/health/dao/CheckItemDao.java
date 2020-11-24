@@ -64,4 +64,8 @@ public interface CheckItemDao {
      * @param checkItem 更新的检查项信息
      */
     void update(CheckItem checkItem);
+
+    CheckItem findById(Integer id);
+
+    Integer findCheckGroupId(Integer id);
 }

@@ -113,4 +113,5 @@ public interface CheckGroupDao {
      */
     List<CheckGroup> findAll();
 
+    Integer findSetmealId(Integer id);
 }

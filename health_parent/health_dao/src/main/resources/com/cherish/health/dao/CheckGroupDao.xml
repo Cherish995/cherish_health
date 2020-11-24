@@ -60,4 +60,7 @@
     <select id="findAll" resultType="checkGroup">
         select * from t_checkgroup
     </select>
+    <select id="findSetmealId" parameterType="int" resultType="int">
+        select setmeal_id from t_setmeal_checkgroup where checkgroup_id=#{id}
+    </select>
 </mapper>

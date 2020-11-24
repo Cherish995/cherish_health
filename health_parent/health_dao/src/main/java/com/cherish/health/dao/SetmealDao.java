@@ -87,4 +87,6 @@ public interface SetmealDao {
      * @param id
      */
     void deleteSetmealById(Integer id);
+
+    Integer findOrderId(Integer id);
 }

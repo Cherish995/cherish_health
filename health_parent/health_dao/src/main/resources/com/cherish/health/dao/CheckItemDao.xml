@@ -41,4 +41,10 @@
         update t_checkitem set name =#{name} ,sex = #{sex},age = #{age},price = #{price},
         type = #{type},remark = #{remark},attention = #{attention} where id = #{id}
     </update>
+    <select id="findById" parameterType="int" resultType="CheckItem">
+        select * from t_checkitem where id = #{id}
+    </select>
+    <select id="findCheckGroupId" parameterType="int" resultType="int">
+        select checkgroup_id  from t_checkgroup_checkitem where  checkitem_id=#{id}
+    </select>
 </mapper>

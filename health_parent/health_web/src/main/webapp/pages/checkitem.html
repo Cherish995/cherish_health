@@ -127,7 +127,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取消</el-button>
-                        <el-button type="primary" @click="handleAdd('dataAddForm')">确定</el-button>
+                        <el-button type="primary" @click="handleAdd()">确定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -258,9 +258,9 @@
 
             },
             //编辑
-            handleEdit(dataEditForm) {
+            handleEdit() {
                 // 校验表单
-                this.$refs[dataEditForm].validate((valid) => {
+                this.$refs['dataEditForm'].validate((valid) => {
                     // 校验表单成功
                     if (valid) {
                         axios.post("/checkitem/update.do", this.formData).then(response => {
@@ -288,9 +288,9 @@
 
             },
             //添加
-            handleAdd(dataAddForm) {
+            handleAdd() {
                 // 校验表单数据
-                this.$refs[dataAddForm].validate((valid) => {
+                this.$refs['dataAddForm'].validate((valid) => {
                     if (valid) {
                         // 表单校验成功
                         // 发送请求

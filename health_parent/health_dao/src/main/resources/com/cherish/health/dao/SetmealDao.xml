@@ -35,7 +35,7 @@
         select checkgroup_id from t_setmeal_checkgroup where setmeal_id  = #{id}
     </select>
     <update id="update" parameterType="setmeal">
-        update t_setmeal set name=#{name},code=#{code},helpCode=#{helpCode},sex=#{sex},age=#{age},price=#{price},remark=#{price},attention=#{attention},img=#{img}
+        update t_setmeal set name=#{name},code=#{code},helpCode=#{helpCode},sex=#{sex},age=#{age},price=#{price},remark=#{price},attention=#{attention},img=#{img},remark=#{remark}
         where id = #{id}
     </update>
     <delete id="deleteCheckGroupIdsBySetmealId" parameterType="int">
@@ -47,4 +47,7 @@
     <delete id="deleteSetmealById" parameterType="int">
         delete from t_setmeal where  id = #{id}
     </delete>
+    <select id="findOrderId" parameterType="int" resultType="int">
+        select id from t_order where setmeal_id =#{id}
+    </select>
 </mapper>

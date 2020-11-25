@@ -8,6 +8,7 @@ import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.Setmeal;
 import com.cherish.health.service.SetmealService;
+import com.cherish.health.utils.QiNiuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,5 +129,21 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public List<String> findImgs() {
         return setmealDao.findAllImgs();
+    }
+
+    /**
+     * 查询所有套餐信息
+     *
+     * @return
+     */
+    @Override
+    public List<Setmeal> findAll() {
+
+        List<Setmeal> setmealList = setmealDao.findAll();
+        if (setmealList != null) {
+            // 拼接图片完整路径
+            setmealList.forEach(setmeal -> setmeal.setImg(QiNiuUtils.DOMAIN + setmeal.getImg()));
+        }
+        return setmealList;
     }
 }

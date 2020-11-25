@@ -53,4 +53,7 @@
     <select id="findAllImgs" resultType="string">
         select img from t_setmeal
     </select>
+    <select id="findAll" resultType="setmeal">
+        select * from t_setmeal
+    </select>
 </mapper>

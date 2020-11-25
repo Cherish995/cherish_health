@@ -92,4 +92,11 @@ public interface SetmealDao {
 
     List<String> findAllImgs();
 
+    /**
+     * 查询所有套餐信息
+     *
+     * @return
+     */
+    List<Setmeal> findAll();
+
 }

@@ -306,6 +306,8 @@
             },
             //编辑
             handleEdit() {
+                let ids = this.checkitemIds;
+                let datas = this.formData;
                 axios.post("/checkgroup/update.do?checkitemIds=" + this.checkitemIds, this.formData).then(response => {
 
                     if (response.data.flag) {
@@ -317,13 +319,14 @@
                             showClose: true
                         })
                         // 刷新页面
-                        this.handleCurrentChange(1);
+                        this.findPage();
                     } else {
                         this.$message({
                             type: "error",
                             message: response.data.message,
                             showClose: true
                         })
+                       this.handleUpdate(datas);
                     }
                 })
             },

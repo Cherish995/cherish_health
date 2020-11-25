@@ -511,7 +511,9 @@
             },
             // 编辑更新
             handleEdit() {
-                axios.post("/setmeal/update.do?checkgroupIds=" + this.checkgroupIds, this.formData).then(response => {
+                let ids = this.checkgroupIds;
+                let datas = this.formData;
+                axios.post("/setmeal/update.do?checkgroupIds=" + ids, datas).then(response => {
                     if (response.data.flag) {
                         // 取消弹框
                         this.dialogFormVisible4Edit = false;
@@ -526,7 +528,8 @@
                             type: "error",
                             message: response.data.message,
                             showClose: true
-                        })
+                        });
+                        this. handleUpdate(datas);
                     }
                 })
             },

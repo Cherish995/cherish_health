@@ -263,6 +263,7 @@
                 this.$refs['dataEditForm'].validate((valid) => {
                     // 校验表单成功
                     if (valid) {
+                        let datas = this.formData;
                         axios.post("/checkitem/update.do", this.formData).then(response => {
                             if (response.data.flag) {
                                 this.$message({
@@ -272,17 +273,29 @@
                                 })
                                 // 隐藏编辑框
                                 this.dialogFormVisible4Edit = false;
-                                this.handleCurrentChange(1);
+                                this.findPage();
                             } else {
                                 this.$message({
                                     type: "error",
                                     message: response.data.message,
                                     showClose: true
+                                });
+                                axios.get("/checkitem/findById.do?id=" + datas.id).then(response => {
+                                    if (response.data.flag) {
+                                        this.formData = response.data.data;
+                                    } else {
+                                        this.$message({
+                                            type: "error",
+                                            message: response.data.message,
+                                            showClose: true
+                                        })
+                                    }
                                 })
                             }
                         })
                     } else {
                         // ignore
+                        // this.resetForm();
                     }
                 })
 

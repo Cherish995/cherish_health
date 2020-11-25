@@ -109,14 +109,24 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Override
     public void delete(Integer id) {
-        // 判断改套餐是否有对应的订单
+        /*// 判断改套餐是否有对应的订单
         Long total = setmealDao.findOrders(id);
         if (total > 0) {
             throw new HealthException(MessageConstant.DELETE_SETMEAL_FAIL);
-        }
+        }*/
         // 删除套餐关联检查组信息
         setmealDao.deleteCheckGroupIdsBySetmealId(id);
         // 删除套餐表改套餐信息
         setmealDao.deleteSetmealById(id);
+    }
+
+    @Override
+    public List<Integer> findOrderId(Integer id) {
+        return setmealDao.findOrderId(id);
+    }
+
+    @Override
+    public List<String> findImgs() {
+        return setmealDao.findAllImgs();
     }
 }

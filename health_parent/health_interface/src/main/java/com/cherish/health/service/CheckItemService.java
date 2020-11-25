@@ -51,4 +51,8 @@ public interface CheckItemService {
      * @param checkItem 更新的检查项信息
      */
     void update(CheckItem checkItem) throws HealthException;
+
+    CheckItem findById(Integer id);
+
+    List<Integer> findCheckGroupId(Integer id);
 }

@@ -67,5 +67,5 @@ public interface CheckItemDao {
 
     CheckItem findById(Integer id);
 
-    Integer findCheckGroupId(Integer id);
+    List<Integer> findCheckGroupId(Integer id);
 }

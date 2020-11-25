@@ -85,4 +85,10 @@ public class CheckItemController {
         checkItemService.update(checkItem);
         return new Result(true, MessageConstant.EDIT_CHECKITEM_SUCCESS);
     }
+
+    @GetMapping("/findById")
+    public Result findById(Integer id) {
+        CheckItem checkItem = checkItemService.findById(id);
+        return new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS, checkItem);
+    }
 }

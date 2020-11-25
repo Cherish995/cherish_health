@@ -1,13 +1,11 @@
 package com.cherish.health.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.dao.CheckItemDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.service.CheckItemService;
-import com.cherish.health.exception.HealthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +67,7 @@ public class CheckItemServiceImpl implements CheckItemService {
     @Transactional
     @Override
     public void deleteById(Integer id) {
-        // 先判断检查项有没有对应的检查组
+        /*// 先判断检查项有没有对应的检查组
         int total = checkItemDao.findByCheckItemIdAndCheckGroupCount(id);
         if (total > 0) {
             // 不可以删除
@@ -77,7 +75,8 @@ public class CheckItemServiceImpl implements CheckItemService {
         } else {
             // 可以删除
             checkItemDao.deleteById(id);
-        }
+        }*/
+        checkItemDao.deleteById(id);
     }
 
     /**
@@ -89,5 +88,15 @@ public class CheckItemServiceImpl implements CheckItemService {
     @Override
     public void update(CheckItem checkItem) {
         checkItemDao.update(checkItem);
+    }
+
+    @Override
+    public CheckItem findById(Integer id) {
+        return checkItemDao.findById(id);
+    }
+
+    @Override
+    public List<Integer> findCheckGroupId(Integer id) {
+        return checkItemDao.findCheckGroupId(id);
     }
 }

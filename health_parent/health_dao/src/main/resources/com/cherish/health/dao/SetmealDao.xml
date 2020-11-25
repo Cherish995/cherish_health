@@ -50,4 +50,7 @@
     <select id="findOrderId" parameterType="int" resultType="int">
         select id from t_order where setmeal_id =#{id}
     </select>
+    <select id="findAllImgs" resultType="string">
+        select img from t_setmeal
+    </select>
 </mapper>

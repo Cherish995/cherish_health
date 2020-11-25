@@ -88,5 +88,8 @@ public interface SetmealDao {
      */
     void deleteSetmealById(Integer id);
 
-    Integer findOrderId(Integer id);
+    List<Integer> findOrderId(Integer id);
+
+    List<String> findAllImgs();
+
 }

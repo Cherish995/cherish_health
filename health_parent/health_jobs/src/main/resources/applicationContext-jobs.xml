@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <!--开启quartz注解驱动-->
+    <task:annotation-driven/>
+    <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler"/>
+
+    <!-- 指定应用名称 -->
+    <dubbo:application name="health_jobs"/>
+    <!--指定服务注册中心地址-->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!--扫消费者的包-->
+    <dubbo:annotation package="com.cherish.health.job"/>
+</beans>

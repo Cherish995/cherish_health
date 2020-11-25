@@ -1,15 +1,17 @@
 package com.cherish.health.aspect;
 
-import com.cherish.health.dao.CheckGroupDao;
-import com.cherish.health.dao.CheckItemDao;
-import com.cherish.health.dao.SetmealDao;
 import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.CheckGroup;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.pojo.Setmeal;
+import com.cherish.health.service.CheckGroupService;
+import com.cherish.health.service.CheckItemService;
+import com.cherish.health.service.SetmealService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,13 +27,91 @@ import java.util.List;
 @Component
 public class HealthAspect {
 
+    private static final Logger log = LoggerFactory.getLogger(HealthAspect.class);
 
     @Autowired
-    private CheckItemDao checkItemDao;
+    private CheckItemService checkItemService;
     @Autowired
-    private CheckGroupDao checkGroupDao;
+    private CheckGroupService checkGroupService;
     @Autowired
-    private SetmealDao setmealDao;
+    private SetmealService setmealService;
+
+    /**
+     * 增强删除检查项功能
+     *
+     * @param joinPoint
+     * @return
+     */
+    @Around("execution(* com.cherish.health.service.impl.CheckItemServiceImpl.deleteById(..))")
+    public Object boostDeleteCheckItem(ProceedingJoinPoint joinPoint) {
+        // 拿到参数数组
+        Object[] args = joinPoint.getArgs();
+        if (args == null || args.length == 0) throw new RuntimeException("严重错误!!!");
+        // 拿到id
+        Integer id = (Integer) args[0];
+        if (id == null) throw new RuntimeException("严重错误!!!");
+        // 判断是否被订单使用
+        if (isCheckItemUsed(id)) throw new HealthException("已被订单使用,删除失败");
+        try {
+            return joinPoint.proceed();
+        } catch (Throwable throwable) {
+            log.error(throwable.getMessage(),throwable);
+            throw new HealthException(throwable.getMessage());
+        }
+    }
+
+    /**
+     * 增强检查组删除功能
+     *
+     * @param joinPoint
+     * @return
+     */
+    @Around("execution(* com.cherish.health.service.impl.CheckGroupServiceImpl.deleteById(..))")
+    public Object boostDeleteCheckGroup(ProceedingJoinPoint joinPoint) {
+        try {
+            // 拿到参数数组
+            Object[] args = joinPoint.getArgs();
+            if (args == null || args.length == 0) throw new RuntimeException("严重错误!!!");
+            // 拿到id
+            Integer id = (Integer) args[0];
+            if (id == null) throw new RuntimeException("严重错误!!!");
+            // 判断是否被订单使用
+            if (isCheckGroupUsed(id)) {
+                throw new HealthException("已被订单使用,删除失败");
+            }
+            return joinPoint.proceed();
+        } catch (Throwable throwable) {
+            log.error(throwable.getMessage(),throwable);
+            throw new HealthException(throwable.getMessage());
+        }
+    }
+
+    /**
+     * 增强套餐删除功能
+     *
+     * @param joinPoint
+     * @return
+     */
+    @Around("execution(* com.cherish.health.service.impl.SetmealServiceImpl.delete(..)))")
+    public Object boostDeleteSetmeal(ProceedingJoinPoint joinPoint) {
+        try {
+            // 拿到参数数组
+            Object[] args = joinPoint.getArgs();
+            if (args == null || args.length == 0) throw new RuntimeException("严重错误!!!");
+            // 拿到id
+            Integer id = (Integer) args[0];
+            if (id == null) throw new RuntimeException("严重错误!!!");
+            // 判断是否被订单使用
+            if (isSetmealUsed(id)) {
+                throw new HealthException("已被订单使用,删除失败");
+            }
+
+            return joinPoint.proceed();
+        } catch (Throwable throwable) {
+            log.error(throwable.getMessage(),throwable);
+            throw new HealthException(throwable.getMessage());
+        }
+    }
 
     /**
      * 增强更新检查项功能
@@ -51,7 +131,7 @@ public class HealthAspect {
             // 判断检查项是否已被订单使用
             if (isCheckItemUsed(id)) {
                 // 查询到数据库的信息
-                CheckItem old_checkItem = checkItemDao.findById(id);
+                CheckItem old_checkItem = checkItemService.findById(id);
                 // 查询不到 抛出异常
                 if (old_checkItem == null) throw new RuntimeException("有大问题!!!");
                 // 并未此次更新并未修改任何修改内容 不执行目标方法(切入点)
@@ -69,7 +149,7 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 将异常自定义处理
-            throwable.printStackTrace();
+            log.error(throwable.getMessage(),throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -100,8 +180,8 @@ public class HealthAspect {
                  * 【检查组已被订单使用】
                  */
                 // 得到所有旧的信息
-                CheckGroup old_checkGroup = checkGroupDao.findById(id);
-                List<Integer> old_checkitemIds = checkGroupDao.findCheckitemIds(id);
+                CheckGroup old_checkGroup = checkGroupService.findById(id);
+                List<Integer> old_checkitemIds = checkGroupService.findCheckitemIds(id);
                 // 判断检查项是否要被修改
                 if (checkitemIds.equals(old_checkitemIds)) {
                     // 啥也不改 你想干啥 就不给你更新的机会了
@@ -124,7 +204,7 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 自己处理异常
-            throwable.printStackTrace();
+            log.error(throwable.getMessage(),throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -155,8 +235,8 @@ public class HealthAspect {
                  * 【套餐已被订单使用】
                  */
                 // 得到所有旧的信息
-                Setmeal old_setmeal = setmealDao.findById(id);
-                List<Integer> old_checkGroupIds = setmealDao.findCheckGroupIds(id);
+                Setmeal old_setmeal = setmealService.findById(id);
+                List<Integer> old_checkGroupIds = setmealService.findCheckGroupIds(id);
                 // 判断检查组是否要被修改
                 if (checkgroupIds.equals(old_checkGroupIds)) {
                     // 啥也不改 你想干啥 就不给你更新的机会了
@@ -178,7 +258,7 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 自己处理异常
-            throwable.printStackTrace();
+            log.error(throwable.getMessage(),throwable);
             throw new HealthException(throwable.getMessage());
         }
 
@@ -193,12 +273,16 @@ public class HealthAspect {
      */
     private Boolean isCheckItemUsed(Integer id) {
 
-        Integer checkGroupId = findCheckGroupIdByCheckItemId(id);
-        if (checkGroupId == null) return false;
-        Integer setmealId = findSetmealIdByCheckGroupId(checkGroupId);
-        if (setmealId == null) return false;
-        Integer orderId = findOrderIdBySetmealId(setmealId);
-        if (orderId == null) return false;
+        List<Integer> groupIds = findCheckGroupIdByCheckItemId(id);
+        if (groupIds == null || groupIds.size() == 0) return false;
+        for (Integer groupId : groupIds) {
+            List<Integer> setmealIds = findSetmealIdByCheckGroupId(groupId);
+            if (setmealIds == null || setmealIds.size() == 0) return false;
+            for (Integer setmealId : setmealIds) {
+                List<Integer> orderIds = findOrderIdBySetmealId(setmealId);
+                if (orderIds == null || orderIds.size() == 0) return false;
+            }
+        }
         return true;
     }
 
@@ -209,19 +293,21 @@ public class HealthAspect {
      * @return
      */
     private Boolean isCheckGroupUsed(Integer id) {
-        Integer setmealId = findSetmealIdByCheckGroupId(id);
-        if (setmealId == null) return false;
-        Integer orderId = findOrderIdBySetmealId(setmealId);
-        if (orderId == null) return false;
+        List<Integer> setmealIds = findSetmealIdByCheckGroupId(id);
+        if (setmealIds == null || setmealIds.size() == 0) return false;
+        for (Integer setmealId : setmealIds) {
+            List<Integer> orderIds = findOrderIdBySetmealId(setmealId);
+            if (orderIds == null || orderIds.size() == 0) return false;
+        }
         return true;
     }
 
     /**
-     * 判断检查项是否已被订单使用
+     * 判断套餐是否已被订单使用
      */
     private Boolean isSetmealUsed(Integer id) {
-        Integer orderId = findOrderIdBySetmealId(id);
-        if (orderId == null) return false;
+        List<Integer> orderIds = findOrderIdBySetmealId(id);
+        if (orderIds == null || orderIds.size() == 0) return false;
         return true;
     }
 
@@ -231,8 +317,8 @@ public class HealthAspect {
      * @param id
      * @return
      */
-    private Integer findCheckGroupIdByCheckItemId(Integer id) {
-        return checkItemDao.findCheckGroupId(id);
+    private List<Integer> findCheckGroupIdByCheckItemId(Integer id) {
+        return checkItemService.findCheckGroupId(id);
     }
 
     /**
@@ -241,8 +327,8 @@ public class HealthAspect {
      * @param id
      * @return
      */
-    private Integer findSetmealIdByCheckGroupId(Integer id) {
-        return checkGroupDao.findSetmealId(id);
+    private List<Integer> findSetmealIdByCheckGroupId(Integer id) {
+        return checkGroupService.findSetmealId(id);
     }
 
     /**
@@ -251,8 +337,8 @@ public class HealthAspect {
      * @param id
      * @return
      */
-    private Integer findOrderIdBySetmealId(Integer id) {
-        return setmealDao.findOrderId(id);
+    private List<Integer> findOrderIdBySetmealId(Integer id) {
+        return setmealService.findOrderId(id);
     }
 
     /**
@@ -295,7 +381,6 @@ public class HealthAspect {
         if (!setmeal.getName().equals(old_setmeal.getName())) return true;
         if (!setmeal.getPrice().equals(old_setmeal.getPrice())) return true;
         if (!setmeal.getSex().equals(old_setmeal.getSex())) return true;
-
         return false;
     }
 }

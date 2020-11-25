@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cherish.health.dao.OrderSettingDao">
+    <select id="findByOrderDate" parameterType="date" resultType="ordersetting">
+        select * from t_ordersetting where orderDate = #{date}
+    </select>
+    <update id="update" parameterType="ordersetting">
+        update t_ordersetting set number = #{number} where orderDate = #{orderDate}
+    </update>
+    <insert id="add" parameterType="ordersetting">
+        insert into t_ordersetting (orderDate,number,reservations)
+        values(#{orderDate,jdbcType=DATE},#{number},#{reservations})
+    </insert>
+    <select id="findDataByDate" parameterType="string" resultType="map">
+        select CAST(DATE_FORMAT(orderDate,'%d') AS signed)
+        date,number,reservations
+        from t_ordersetting
+        where orderdate like #{date}
+    </select>
+</mapper>

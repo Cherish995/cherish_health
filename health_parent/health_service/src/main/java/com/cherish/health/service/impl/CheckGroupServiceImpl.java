@@ -120,12 +120,12 @@ public class CheckGroupServiceImpl implements CheckGroupService {
     @Transactional
     @Override
     public void deleteById(Integer id) {
-        // 判断该id对应检查组对应的套餐是否存在 存在不能删除 不存在随便删
+        /*// 判断该id对应检查组对应的套餐是否存在 存在不能删除 不存在随便删
         Long total = checkGroupDao.findSetmeal(id);
         if (total > 0) {
             // 亲 不能删除哦
             throw new HealthException(MessageConstant.DELETE_CHECKGROUP_FAIL);
-        }
+        }*/
         // 删除啦
         checkGroupDao.deleteCheckGroupAndCheckItemById(id);
         checkGroupDao.deleteById(id);
@@ -139,5 +139,10 @@ public class CheckGroupServiceImpl implements CheckGroupService {
     @Override
     public List<CheckGroup> findAll() {
         return checkGroupDao.findAll();
+    }
+
+    @Override
+    public List<Integer> findSetmealId(Integer id) {
+        return checkGroupDao.findSetmealId(id);
     }
 }

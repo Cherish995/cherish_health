@@ -62,4 +62,9 @@ public interface SetmealService {
      * @throws HealthException
      */
     void delete(Integer id) throws HealthException;
+
+    List<Integer> findOrderId(Integer id);
+
+    List<String> findImgs();
+
 }

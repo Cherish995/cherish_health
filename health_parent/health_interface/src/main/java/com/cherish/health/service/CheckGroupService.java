@@ -70,4 +70,5 @@ public interface CheckGroupService {
      */
     List<CheckGroup> findAll();
 
+    List<Integer> findSetmealId(Integer id);
 }

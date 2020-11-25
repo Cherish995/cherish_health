@@ -10,6 +10,7 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.BatchStatus;
 import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 
 import java.util.ArrayList;
@@ -128,6 +129,24 @@ public class QiNiuUtils {
         Auth auth = Auth.create(ACCESSKEY, SECRETKEY);
         // 创建操作某个仓库的管理器
         return new BucketManager(auth, new Configuration(Zone.zone0()));
+    }
+
+    public static List<String> listFile() {
+        BucketManager bucketManager = getBucketManager();
+        //列举空间文件列表, 第一个参数：图片的仓库（空间名）,第二个参数，文件名前缀过滤。“”代理所有
+        BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(BUCKET,"");
+        List<String> imageFiles = new ArrayList<String>();
+        while (fileListIterator.hasNext()) {
+            //处理获取的file list结果
+            FileInfo[] items = fileListIterator.next();
+            for (FileInfo item : items) {
+                // item.key 文件名
+                imageFiles.add(item.key);
+                //System.out.println(item.key);
+            }
+        }
+        return imageFiles;
+
     }
 
 }

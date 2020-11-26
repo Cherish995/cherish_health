@@ -38,11 +38,18 @@
         <jedis.version>2.9.0</jedis.version>
         <quartz.version>2.2.1</quartz.version>
         <lombok.version>1.18.10</lombok.version>
+        <freemarker.version>2.3.23</freemarker.version>
     </properties>
     <!-- 依赖管理标签  必须加 -->
     <dependencyManagement>
 
         <dependencies>
+            <!--静态页面技术freeMarker-->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>

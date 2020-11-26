@@ -34,7 +34,7 @@ public interface SetmealDao {
      *
      * @param setmeal
      */
-    void addSetmeal(Setmeal setmeal);
+    Integer addSetmeal(Setmeal setmeal);
 
     /**
      * 添加套餐与检查组关联数据

@@ -50,7 +50,7 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Transactional
     @Override
-    public void add(Setmeal setmeal, Integer[] checkgroupIds) {
+    public Integer add(Setmeal setmeal, Integer[] checkgroupIds) {
         // 添加套餐信息到套餐表
         setmealDao.addSetmeal(setmeal);
         // 添加套餐关联检查组信息到关联表
@@ -59,6 +59,7 @@ public class SetmealServiceImpl implements SetmealService {
                 setmealDao.addSetmealAndCheckGroup(setmeal.getId(), checkgroupId);
             }
         }
+        return setmeal.getId();
     }
 
     /**

@@ -16,14 +16,14 @@ import java.util.List;
  * @version 1.8.0_121
  * @date 2020/11/25
  */
-@Component
+//@Component
 public class CleanImgJob {
     @Reference
     private SetmealService setmealService;
 
     private static final Logger log = LoggerFactory.getLogger(CleanImgJob.class);
 
-    @Scheduled(initialDelay = 3000, fixedDelay = 1800000)
+   // @Scheduled(initialDelay = 3000, fixedDelay = 1800000)
     public void cleanImg() {
         log.info("清理任务开始执行....");
         // 拿到七牛云上的所有图片名称集合

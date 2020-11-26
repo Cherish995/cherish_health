@@ -13,4 +13,6 @@
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
     <!--扫消费者的包-->
     <dubbo:annotation package="com.cherish.health.job"/>
+    <import resource="classpath:spring-redis.xml"/>
+    <import resource="classpath:spring-freemarker.xml"/>
 </beans>

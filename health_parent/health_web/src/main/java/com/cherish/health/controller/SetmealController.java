@@ -8,8 +8,11 @@ import com.cherish.health.entity.Result;
 import com.cherish.health.pojo.Setmeal;
 import com.cherish.health.service.SetmealService;
 import com.cherish.health.utils.QiNiuUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,6 +35,8 @@ public class SetmealController {
     @Reference
     private SetmealService setmealService;
 
+    @Autowired
+    private JedisPool jedisPool;
     /**
      * 分页查询套餐列表数据
      *
@@ -79,6 +84,12 @@ public class SetmealController {
     @PostMapping("/add")
     public Result add(@RequestBody Setmeal setmeal, @RequestParam("checkgroupIds") Integer[] checkgroupIds) {
         setmealService.add(setmeal, checkgroupIds);
+        // 获取redis连接对象
+        Jedis jedis = jedisPool.getResource();
+        // redis中set集合中保存的元素格式为: 套餐id|操作类型|时间戳
+        jedis.sadd("setmeal:static:html",setmeal.getId() + "|1|" + System.currentTimeMillis());
+        // 还回连接池
+        jedis.close();
         return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
     }
 
@@ -120,6 +131,9 @@ public class SetmealController {
     @PostMapping("/update")
     public Result update(@RequestBody Setmeal setmeal, @RequestParam("checkgroupIds") Integer[] checkgroupIds) {
         setmealService.update(setmeal, checkgroupIds);
+        Jedis jedis = jedisPool.getResource();
+        jedis.sadd("setmeal:static:html",setmeal.getId() + "|1|" + System.currentTimeMillis());
+        jedis.close();
         return new Result(true, MessageConstant.EDIT_SETMEAL_SUCCESS);
     }
 
@@ -132,6 +146,10 @@ public class SetmealController {
     @GetMapping("/delete")
     public Result delete(Integer id) {
         setmealService.delete(id);
+        Jedis jedis = jedisPool.getResource();
+        // 操作符0代表删除
+        jedis.sadd("setmeal:static:html",id + "|0|" + System.currentTimeMillis());
+        jedis.close();
         return new Result(true, MessageConstant.DELETE_SETMEAL_SUCCESS);
     }
 }

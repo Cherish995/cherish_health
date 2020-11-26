@@ -136,7 +136,7 @@ public class HealthAspect {
                 // 查询不到 抛出异常
                 if (old_checkItem == null) throw new RuntimeException("有大问题!!!");
                 // 并未此次更新并未修改任何修改内容 不执行目标方法(切入点)
-                if (old_checkItem.equals(checkItem)) return null;
+                if (old_checkItem.equals(checkItem)) return -1;
                 else {
                     // 修改了不能暂时修改的数据 抛异常给你
                     if (isCheckItemUpdate(old_checkItem, checkItem)) throw new HealthException("已有订单,不能更改");
@@ -186,7 +186,7 @@ public class HealthAspect {
                 // 判断检查项是否要被修改
                 if (checkitemIds.equals(old_checkitemIds)) {
                     // 啥也不改 你想干啥 就不给你更新的机会了
-                    if (checkGroup.equals(old_checkGroup)) return null;
+                    if (checkGroup.equals(old_checkGroup)) return -1;
                 } else {
                     // 检查项是不能修改的
                     throw new HealthException("已有订单使用,修改失败");
@@ -241,7 +241,7 @@ public class HealthAspect {
                 // 判断检查组是否要被修改
                 if (checkgroupIds.equals(old_checkGroupIds)) {
                     // 啥也不改 你想干啥 就不给你更新的机会了
-                    if (setmeal.equals(old_setmeal)) return null;
+                    if (setmeal.equals(old_setmeal)) return -1;
                 } else {
                     // 检查组是不能修改的
                     throw new HealthException("已有订单使用,修改失败");

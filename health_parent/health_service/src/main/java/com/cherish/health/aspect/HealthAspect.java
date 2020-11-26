@@ -3,6 +3,7 @@ package com.cherish.health.aspect;
 import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.CheckGroup;
 import com.cherish.health.pojo.CheckItem;
+import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 import com.cherish.health.service.CheckGroupService;
 import com.cherish.health.service.CheckItemService;
@@ -55,7 +56,7 @@ public class HealthAspect {
         try {
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            log.error(throwable.getMessage(),throwable);
+            log.error(throwable.getMessage(), throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -81,7 +82,7 @@ public class HealthAspect {
             }
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            log.error(throwable.getMessage(),throwable);
+            log.error(throwable.getMessage(), throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -108,7 +109,7 @@ public class HealthAspect {
 
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            log.error(throwable.getMessage(),throwable);
+            log.error(throwable.getMessage(), throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -149,7 +150,7 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 将异常自定义处理
-            log.error(throwable.getMessage(),throwable);
+            log.error(throwable.getMessage(), throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -204,7 +205,7 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 自己处理异常
-            log.error(throwable.getMessage(),throwable);
+            log.error(throwable.getMessage(), throwable);
             throw new HealthException(throwable.getMessage());
         }
     }
@@ -258,7 +259,7 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 自己处理异常
-            log.error(throwable.getMessage(),throwable);
+            log.error(throwable.getMessage(), throwable);
             throw new HealthException(throwable.getMessage());
         }
 
@@ -273,7 +274,7 @@ public class HealthAspect {
      */
     private Boolean isCheckItemUsed(Integer id) {
 
-        List<Integer> groupIds = findCheckGroupIdByCheckItemId(id);
+        /*List<Integer> groupIds = findCheckGroupIdByCheckItemId(id);
         if (groupIds == null || groupIds.size() == 0) return false;
         for (Integer groupId : groupIds) {
             List<Integer> setmealIds = findSetmealIdByCheckGroupId(groupId);
@@ -282,7 +283,9 @@ public class HealthAspect {
                 List<Integer> orderIds = findOrderIdBySetmealId(setmealId);
                 if (orderIds == null || orderIds.size() == 0) return false;
             }
-        }
+        }*/
+        List<Order> orderList = checkItemService.findOrderByCheckItemId(id);
+        if (orderList == null || orderList.size() == 0) return false;
         return true;
     }
 
@@ -293,12 +296,14 @@ public class HealthAspect {
      * @return
      */
     private Boolean isCheckGroupUsed(Integer id) {
-        List<Integer> setmealIds = findSetmealIdByCheckGroupId(id);
+        /*List<Integer> setmealIds = findSetmealIdByCheckGroupId(id);
         if (setmealIds == null || setmealIds.size() == 0) return false;
         for (Integer setmealId : setmealIds) {
             List<Integer> orderIds = findOrderIdBySetmealId(setmealId);
             if (orderIds == null || orderIds.size() == 0) return false;
-        }
+        }*/
+        List<Order> orderList = checkGroupService.findOrderByCheckGroupId(id);
+        if (orderList == null || orderList.size() == 0) return false;
         return true;
     }
 
@@ -306,39 +311,11 @@ public class HealthAspect {
      * 判断套餐是否已被订单使用
      */
     private Boolean isSetmealUsed(Integer id) {
-        List<Integer> orderIds = findOrderIdBySetmealId(id);
-        if (orderIds == null || orderIds.size() == 0) return false;
+       /* List<Integer> orderIds = findOrderIdBySetmealId(id);
+        if (orderIds == null || orderIds.size() == 0) return false;*/
+        List<Order> orderList = setmealService.findOrderBySetmealId(id);
+        if (orderList == null || orderList.size() == 0) return false;
         return true;
-    }
-
-    /**
-     * 根据检查项id查询对应的检查组id
-     *
-     * @param id
-     * @return
-     */
-    private List<Integer> findCheckGroupIdByCheckItemId(Integer id) {
-        return checkItemService.findCheckGroupId(id);
-    }
-
-    /**
-     * 根据检查组id查询套餐id
-     *
-     * @param id
-     * @return
-     */
-    private List<Integer> findSetmealIdByCheckGroupId(Integer id) {
-        return checkGroupService.findSetmealId(id);
-    }
-
-    /**
-     * 根据套餐id查询对应的订单ID
-     *
-     * @param id
-     * @return
-     */
-    private List<Integer> findOrderIdBySetmealId(Integer id) {
-        return setmealService.findOrderId(id);
     }
 
     /**

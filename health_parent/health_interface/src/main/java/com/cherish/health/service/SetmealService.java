@@ -3,6 +3,7 @@ package com.cherish.health.service;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.exception.HealthException;
+import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 
 import java.util.List;
@@ -63,8 +64,11 @@ public interface SetmealService {
      */
     void delete(Integer id) throws HealthException;
 
-    List<Integer> findOrderId(Integer id);
-
+    /**
+     * 查询所有的图片名称
+     *
+     * @return
+     */
     List<String> findImgs();
 
     /**
@@ -73,4 +77,21 @@ public interface SetmealService {
      * @return
      */
     List<Setmeal> findAll();
+
+    /**
+     * 查询更全面的套餐信息
+     *
+     * @param id
+     * @return
+     */
+    Setmeal findByDetailId(Integer id);
+
+
+    /**
+     * 根据套餐id查询对应订单信息
+     *
+     * @param id
+     * @return
+     */
+    List<Order> findOrderBySetmealId(Integer id);
 }

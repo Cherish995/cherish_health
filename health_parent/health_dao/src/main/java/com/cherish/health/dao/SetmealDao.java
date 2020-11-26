@@ -1,6 +1,7 @@
 package com.cherish.health.dao;
 
 import com.cherish.health.entity.QueryPageBean;
+import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 import org.apache.ibatis.annotations.Param;
 
@@ -88,8 +89,11 @@ public interface SetmealDao {
      */
     void deleteSetmealById(Integer id);
 
-    List<Integer> findOrderId(Integer id);
-
+    /**
+     * 查询所有图片名称
+     *
+     * @return
+     */
     List<String> findAllImgs();
 
     /**
@@ -99,4 +103,19 @@ public interface SetmealDao {
      */
     List<Setmeal> findAll();
 
+    /**
+     * 查询套餐详情页信息
+     *
+     * @param id
+     * @return
+     */
+    Setmeal findByDetailId(Integer id);
+
+    /**
+     * 根据套餐id查询对应订单信息
+     *
+     * @param id
+     * @return
+     */
+    List<Order> findOrderBySetmealId(Integer id);
 }

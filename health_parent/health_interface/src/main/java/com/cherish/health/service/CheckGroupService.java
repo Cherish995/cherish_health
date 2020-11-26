@@ -4,6 +4,7 @@ import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.CheckGroup;
+import com.cherish.health.pojo.Order;
 
 import java.util.List;
 
@@ -70,5 +71,12 @@ public interface CheckGroupService {
      */
     List<CheckGroup> findAll();
 
-    List<Integer> findSetmealId(Integer id);
+
+    /**
+     * 根据检查组id查询对应订单信息
+     *
+     * @param id
+     * @return
+     */
+    List<Order> findOrderByCheckGroupId(Integer id);
 }

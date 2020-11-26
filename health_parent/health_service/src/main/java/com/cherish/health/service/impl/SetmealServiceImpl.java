@@ -6,6 +6,7 @@ import com.cherish.health.dao.SetmealDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.exception.HealthException;
+import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 import com.cherish.health.service.SetmealService;
 import com.cherish.health.utils.QiNiuUtils;
@@ -110,22 +111,22 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Override
     public void delete(Integer id) {
-        /*// 判断改套餐是否有对应的订单
+        // 判断改套餐是否有对应的订单
         Long total = setmealDao.findOrders(id);
         if (total > 0) {
             throw new HealthException(MessageConstant.DELETE_SETMEAL_FAIL);
-        }*/
+        }
         // 删除套餐关联检查组信息
         setmealDao.deleteCheckGroupIdsBySetmealId(id);
         // 删除套餐表改套餐信息
         setmealDao.deleteSetmealById(id);
     }
 
-    @Override
-    public List<Integer> findOrderId(Integer id) {
-        return setmealDao.findOrderId(id);
-    }
-
+    /**
+     * 查询所有的图片名称
+     *
+     * @return
+     */
     @Override
     public List<String> findImgs() {
         return setmealDao.findAllImgs();
@@ -145,5 +146,28 @@ public class SetmealServiceImpl implements SetmealService {
             setmealList.forEach(setmeal -> setmeal.setImg(QiNiuUtils.DOMAIN + setmeal.getImg()));
         }
         return setmealList;
+    }
+
+    /**
+     * 查询套餐详情页信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Setmeal findByDetailId(Integer id) {
+
+        return setmealDao.findByDetailId(id);
+    }
+
+    /**
+     * 根据套餐id查询对应订单信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Order> findOrderBySetmealId(Integer id) {
+        return setmealDao.findOrderBySetmealId(id);
     }
 }

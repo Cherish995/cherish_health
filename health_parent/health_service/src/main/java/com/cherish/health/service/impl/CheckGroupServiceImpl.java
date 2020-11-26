@@ -6,6 +6,7 @@ import com.cherish.health.dao.CheckGroupDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckGroup;
+import com.cherish.health.pojo.Order;
 import com.cherish.health.service.CheckGroupService;
 import com.cherish.health.exception.HealthException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +107,6 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         // 修改检查项与检查组关联信息
         if (checkitemIds != null) {
             for (Integer checkitemId : checkitemIds) {
-
                 checkGroupDao.updateCheckGroupAndCheckItem(checkGroup.getId(), checkitemId);
             }
         }
@@ -120,12 +120,12 @@ public class CheckGroupServiceImpl implements CheckGroupService {
     @Transactional
     @Override
     public void deleteById(Integer id) {
-        /*// 判断该id对应检查组对应的套餐是否存在 存在不能删除 不存在随便删
+        // 判断该id对应检查组对应的套餐是否存在 存在不能删除 不存在随便删
         Long total = checkGroupDao.findSetmeal(id);
         if (total > 0) {
             // 亲 不能删除哦
             throw new HealthException(MessageConstant.DELETE_CHECKGROUP_FAIL);
-        }*/
+        }
         // 删除啦
         checkGroupDao.deleteCheckGroupAndCheckItemById(id);
         checkGroupDao.deleteById(id);
@@ -141,8 +141,14 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         return checkGroupDao.findAll();
     }
 
+
+    /**
+     * 根据检查组id查询对应订单信息
+     * @param id
+     * @return
+     */
     @Override
-    public List<Integer> findSetmealId(Integer id) {
-        return checkGroupDao.findSetmealId(id);
+    public List<Order> findOrderByCheckGroupId(Integer id) {
+        return checkGroupDao.findOrderByCheckGroupId(id);
     }
 }

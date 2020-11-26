@@ -4,6 +4,7 @@ import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.CheckItem;
+import com.cherish.health.pojo.Order;
 
 import java.util.List;
 
@@ -52,7 +53,19 @@ public interface CheckItemService {
      */
     void update(CheckItem checkItem) throws HealthException;
 
+    /**
+     * 根据id查询检查项信息
+     *
+     * @param id
+     * @return
+     */
     CheckItem findById(Integer id);
 
-    List<Integer> findCheckGroupId(Integer id);
+    /**
+     * 根据检查项id查询订单信息
+     *
+     * @param id
+     * @return
+     */
+    List<Order> findOrderByCheckItemId(Integer id);
 }

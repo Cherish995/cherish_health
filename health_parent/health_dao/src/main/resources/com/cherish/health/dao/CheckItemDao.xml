@@ -47,4 +47,13 @@
     <select id="findCheckGroupId" parameterType="int" resultType="int">
         select checkgroup_id  from t_checkgroup_checkitem where  checkitem_id=#{id}
     </select>
+
+    <select id="findOrderByCheckItemId" parameterType="int" resultType="Order">
+        SELECT o.*
+        FROM
+	      t_checkitem ci,t_checkgroup_checkitem cc,t_checkgroup cg,t_setmeal_checkgroup sc,t_setmeal s,t_order o
+        WHERE
+	        ci.id = cc.checkitem_id AND cc.checkgroup_id = cg.id AND cg.id = sc.checkgroup_id AND sc.setmeal_id =s.id
+	        AND s.id = o.setmeal_id and ci.id = #{id}
+    </select>
 </mapper>

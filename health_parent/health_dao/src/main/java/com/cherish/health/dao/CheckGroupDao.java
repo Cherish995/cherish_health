@@ -2,6 +2,7 @@ package com.cherish.health.dao;
 
 import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckGroup;
+import com.cherish.health.pojo.Order;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -113,5 +114,12 @@ public interface CheckGroupDao {
      */
     List<CheckGroup> findAll();
 
-    List<Integer> findSetmealId(Integer id);
+
+    /**
+     * 根据检查组id查询对应订单信息
+     *
+     * @param id
+     * @return
+     */
+    List<Order> findOrderByCheckGroupId(Integer id);
 }

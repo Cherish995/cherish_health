@@ -56,4 +56,42 @@
     <select id="findAll" resultType="setmeal">
         select * from t_setmeal
     </select>
+    <select id="findOrderBySetmealId" parameterType="int" resultType="Order">
+        SELECT o.*
+        FROM
+	      t_setmeal s,t_order o
+        WHERE
+	      s.id = o.setmeal_id and s.id = #{id}
+    </select>
+    <select id="findByDetailId" parameterType="int" resultMap="Detail">
+      SELECT
+	      s.*,
+        sc.checkgroup_id, cg.name checkgroup_name, cg.remark as checkgroup_remark,
+        cc.checkitem_id, ci.name checkitem_name
+      FROM
+	    t_setmeal s,t_setmeal_checkgroup sc,t_checkgroup cg,t_checkgroup_checkitem cc,t_checkitem ci
+      WHERE
+	    s.id = sc.setmeal_id AND sc.checkgroup_id = cg.id AND cg.id = cc.checkgroup_id AND cc.checkitem_id = ci.id AND s.id = 12
+    </select>
+    <resultMap id="Detail" type="setmeal">
+        <id property="id" column="id"/>
+        <result property="name" column="name" />
+        <result property="code" column="code" />
+        <result property="helpCode" column="helpCode" />
+        <result property="sex" column="sex" />
+        <result property="age" column="age" />
+        <result property="price" column="price" />
+        <result property="remark" column="remark" />
+        <result property="attention" column="attention" />
+        <result property="img" column="img" />
+        <collection property="checkGroups" ofType="CheckGroup">
+            <id property="id" column="checkgroup_id"/>
+            <result property="name" column="checkgroup_name"/>
+            <result property="remark" column="checkgroup_remark"/>
+            <collection property="checkItems" ofType="CheckItem">
+                <id property="id" column="checkitem_id"/>
+                <result property="name" column="checkitem_name"/>
+            </collection>
+        </collection>
+    </resultMap>
 </mapper>

@@ -97,7 +97,7 @@ public class GenerateHtmlJob {
         List<Setmeal> list = setmealService.findAll();
         // 拼接图片路径
         list.forEach(setmeal -> {
-            setmeal.setImg(/*QiNiuUtils.DOMAIN +*/ setmeal.getImg());
+            setmeal.setImg(QiNiuUtils.DOMAIN + setmeal.getImg());
         });
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("setmealList", list);

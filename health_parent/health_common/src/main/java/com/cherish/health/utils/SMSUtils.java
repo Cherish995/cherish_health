@@ -15,7 +15,7 @@ import com.aliyuncs.profile.IClientProfile;
 public class SMSUtils {
     public static final String VALIDATE_CODE = "SMS_205875773";//发送短信验证码
     public static final String ORDER_NOTICE = "SMS_205875773";//体检预约成功通知
-    private static final String SIGN_NAEM = "";// 短信的签名
+    private static final String SIGN_NAEM = "万达健康";// 短信的签名
     private static final String PARAMETER_NAME = "code";
     private static final String ACCESS_KEY = "LTAI4GKitoLbE5tUVuddMrfD"; //你的AccessKey ID
     private static final String SECRET_KEY = "MZMpPSoRVRTiKwtTAFzCneJeqWZ3r8"; //你的AccessKey Secret

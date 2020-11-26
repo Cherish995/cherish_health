@@ -71,7 +71,7 @@
       FROM
 	    t_setmeal s,t_setmeal_checkgroup sc,t_checkgroup cg,t_checkgroup_checkitem cc,t_checkitem ci
       WHERE
-	    s.id = sc.setmeal_id AND sc.checkgroup_id = cg.id AND cg.id = cc.checkgroup_id AND cc.checkitem_id = ci.id AND s.id = 12
+	    s.id = sc.setmeal_id AND sc.checkgroup_id = cg.id AND cg.id = cc.checkgroup_id AND cc.checkitem_id = ci.id AND s.id = #{id}
     </select>
     <resultMap id="Detail" type="setmeal">
         <id property="id" column="id"/>

@@ -86,7 +86,7 @@
                     axios.post("/login/check.do",this.loginInfo).then((response) => {
                         if(response.data.flag){
                             //登录成功,跳转到index.html
-                            window.location.href="index.html";
+                            window.location.href="/pages/index.html";
                         }else{
                             //失败，提示失败信息
                             this.$message.error(response.data.message);

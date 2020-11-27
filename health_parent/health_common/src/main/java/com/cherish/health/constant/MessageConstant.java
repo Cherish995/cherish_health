@@ -61,6 +61,7 @@ public interface MessageConstant {
     static final String ORDER_FULL = "预约已满";
     static final String HAS_ORDERED = "已经完成预约，不能重复预约";
     static final String ORDER_SUCCESS = "预约成功";
+    static final String ORDER_FAIL = "预约失败";
     static final String GET_USERNAME_SUCCESS = "获取当前登录用户名称成功";
     static final String GET_USERNAME_FAIL = "获取当前登录用户名称失败";
     static final String GET_MENU_SUCCESS = "获取当前登录用户菜单成功";
@@ -73,4 +74,5 @@ public interface MessageConstant {
     static final String GET_BUSINESS_REPORT_FAIL = "获取运营统计数据失败";
     static final String GET_SETMEAL_LIST_SUCCESS = "查询套餐列表数据成功";
     static final String GET_SETMEAL_LIST_FAIL = "查询套餐列表数据失败";
+    String SENT_VALIDATECODE = "验证码已经发送了，请注意查收";
 }

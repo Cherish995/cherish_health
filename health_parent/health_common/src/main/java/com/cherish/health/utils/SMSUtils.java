@@ -21,7 +21,9 @@ public class SMSUtils {
     private static final String SECRET_KEY = "MZMpPSoRVRTiKwtTAFzCneJeqWZ3r8"; //你的AccessKey Secret
 
     public static void main(String[] args) throws ClientException {
-        SMSUtils.sendShortMessage(VALIDATE_CODE, "13277312137", "666666");
+
+        SMSUtils.sendShortMessage(VALIDATE_CODE, "13277312137", "520520");
+
     }
 
     /**

@@ -6,6 +6,7 @@ import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.OrderSetting;
 import com.cherish.health.service.OrderSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
  * @version 1.8.0_121
  * @date 2020/11/25
  */
-@Service
+@Service(interfaceClass = OrderSettingService.class)
 public class OrderSettingServiceImpl implements OrderSettingService {
 
     @Autowired
@@ -27,6 +28,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
      * @param orderSettingList
      */
     @Override
+    @Transactional
     public void add(List<OrderSetting> orderSettingList) {
         if (orderSettingList != null) {
             // 遍历
@@ -65,11 +67,12 @@ public class OrderSettingServiceImpl implements OrderSettingService {
      * @param orderSetting
      */
     @Override
+    @Transactional
     public void update(OrderSetting orderSetting) {
         // 通过日期查询旧预约设置信息
         OrderSetting old_orderSetting = orderSettingDao.findByOrderDate(orderSetting.getOrderDate());
         // 判断旧预约设置是否存在
-        if ( old_orderSetting != null ) {
+        if (old_orderSetting != null) {
             // 判断更新后的最大预约数是否大等于已预约人数
             if (orderSetting.getNumber() < old_orderSetting.getReservations()) {
                 // 报错 已预约数超过最大预约数，接口异常声明

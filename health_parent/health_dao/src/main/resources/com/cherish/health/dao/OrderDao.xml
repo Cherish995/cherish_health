@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cherish.health.dao.OrderDao">
+    <select id="findOrder" parameterType="orderInfo" resultType="Order">
+        select * from t_order where
+        member_id = #{memberId} and orderDate = #{orderDate} and
+        setmeal_id = #{setmealId}
+    </select>
+    <insert id="addOrder" parameterType="orderInfo">
+        <selectKey resultType="int" order="AFTER" keyProperty="orderId">
+            select last_insert_id()
+        </selectKey>
+        insert into t_order(member_id,orderDate,orderType,orderStatus,setmeal_id)
+        values (#{memberId},#{orderDate},#{orderType},#{orderStatus},#{setmealId})
+    </insert>
+    <select id="findById" parameterType="int" resultType="Order">
+        select * from t_order where id = #{id}
+    </select>
+    <select id="findOrderInfoByOrderId" parameterType="int" resultType="OrderInfo">
+        select
+          o.id orderId,o.orderDate,o.orderType,m.name,m.id memberId,s.name setmeal
+        from
+          t_order o,t_member m,t_setmeal s
+        where
+          m.id=o.member_id and o.setmeal_id = s.id and o.id = #{id}
+    </select>
+
+</mapper>

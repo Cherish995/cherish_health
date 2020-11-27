@@ -41,4 +41,11 @@ public interface OrderSettingDao {
      * @return
      */
     List<Map<String, Integer>> findDataByDate(String date);
+
+    /**
+     * 修改已预约数
+     *
+     * @param orderDate
+     */
+    void updateByOrderDate(Date orderDate);
 }

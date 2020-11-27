@@ -19,4 +19,7 @@
         from t_ordersetting
         where orderdate like #{date}
     </select>
+    <update id="updateByOrderDate" parameterType="date">
+        update t_ordersetting set reservations = reservations+1 where orderDate = #{date} and number >= reservations+1
+    </update>
 </mapper>

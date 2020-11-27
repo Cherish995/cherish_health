@@ -45,15 +45,16 @@ public class HealthAspect {
      */
     @Around("execution(* com.cherish.health.service.impl.CheckItemServiceImpl.deleteById(..))")
     public Object boostDeleteCheckItem(ProceedingJoinPoint joinPoint) {
-        // 拿到参数数组
-        Object[] args = joinPoint.getArgs();
-        if (args == null || args.length == 0) throw new RuntimeException("严重错误!!!");
-        // 拿到id
-        Integer id = (Integer) args[0];
-        if (id == null) throw new RuntimeException("严重错误!!!");
-        // 判断是否被订单使用
-        if (isCheckItemUsed(id)) throw new HealthException("已被订单使用,删除失败");
         try {
+            // 拿到参数数组
+            Object[] args = joinPoint.getArgs();
+            if (args == null || args.length == 0) throw new RuntimeException("严重错误!!!");
+            // 拿到id
+            Integer id = (Integer) args[0];
+            if (id == null) throw new RuntimeException("严重错误!!!");
+            // 判断是否被订单使用
+            if (isCheckItemUsed(id)) throw new HealthException("已被订单使用,删除失败");
+
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             log.error(throwable.getMessage(), throwable);

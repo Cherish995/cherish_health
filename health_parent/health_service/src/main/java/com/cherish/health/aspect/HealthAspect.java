@@ -54,11 +54,11 @@ public class HealthAspect {
             if (id == null) throw new RuntimeException("严重错误!!!");
             // 判断是否被订单使用
             if (isCheckItemUsed(id)) throw new HealthException("已被订单使用,删除失败");
-
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            log.error(throwable.getMessage(), throwable);
-            throw new HealthException(throwable.getMessage());
+            log.debug(throwable.getMessage());
+            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            throw new RuntimeException(throwable);
         }
     }
 
@@ -83,8 +83,9 @@ public class HealthAspect {
             }
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            log.error(throwable.getMessage(), throwable);
-            throw new HealthException(throwable.getMessage());
+            log.debug(throwable.getMessage(), throwable);
+            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            throw new RuntimeException(throwable);
         }
     }
 
@@ -110,8 +111,9 @@ public class HealthAspect {
 
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            log.error(throwable.getMessage(), throwable);
-            throw new HealthException(throwable.getMessage());
+            log.debug(throwable.getMessage(), throwable);
+            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            throw new RuntimeException(throwable);
         }
     }
 
@@ -151,8 +153,9 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 将异常自定义处理
-            log.error(throwable.getMessage(), throwable);
-            throw new HealthException(throwable.getMessage());
+            log.debug(throwable.getMessage(), throwable);
+            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            throw new RuntimeException(throwable);
         }
     }
 
@@ -206,8 +209,9 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 自己处理异常
-            log.error(throwable.getMessage(), throwable);
-            throw new HealthException(throwable.getMessage());
+            log.debug(throwable.getMessage(), throwable);
+            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            throw new RuntimeException(throwable);
         }
     }
 
@@ -260,8 +264,9 @@ public class HealthAspect {
             }
         } catch (Throwable throwable) {
             // 自己处理异常
-            log.error(throwable.getMessage(), throwable);
-            throw new HealthException(throwable.getMessage());
+            log.debug(throwable.getMessage(), throwable);
+            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            throw new RuntimeException(throwable);
         }
 
 
@@ -275,16 +280,6 @@ public class HealthAspect {
      */
     private Boolean isCheckItemUsed(Integer id) {
 
-        /*List<Integer> groupIds = findCheckGroupIdByCheckItemId(id);
-        if (groupIds == null || groupIds.size() == 0) return false;
-        for (Integer groupId : groupIds) {
-            List<Integer> setmealIds = findSetmealIdByCheckGroupId(groupId);
-            if (setmealIds == null || setmealIds.size() == 0) return false;
-            for (Integer setmealId : setmealIds) {
-                List<Integer> orderIds = findOrderIdBySetmealId(setmealId);
-                if (orderIds == null || orderIds.size() == 0) return false;
-            }
-        }*/
         List<Order> orderList = checkItemService.findOrderByCheckItemId(id);
         if (orderList == null || orderList.size() == 0) return false;
         return true;
@@ -297,12 +292,6 @@ public class HealthAspect {
      * @return
      */
     private Boolean isCheckGroupUsed(Integer id) {
-        /*List<Integer> setmealIds = findSetmealIdByCheckGroupId(id);
-        if (setmealIds == null || setmealIds.size() == 0) return false;
-        for (Integer setmealId : setmealIds) {
-            List<Integer> orderIds = findOrderIdBySetmealId(setmealId);
-            if (orderIds == null || orderIds.size() == 0) return false;
-        }*/
         List<Order> orderList = checkGroupService.findOrderByCheckGroupId(id);
         if (orderList == null || orderList.size() == 0) return false;
         return true;
@@ -312,8 +301,6 @@ public class HealthAspect {
      * 判断套餐是否已被订单使用
      */
     private Boolean isSetmealUsed(Integer id) {
-       /* List<Integer> orderIds = findOrderIdBySetmealId(id);
-        if (orderIds == null || orderIds.size() == 0) return false;*/
         List<Order> orderList = setmealService.findOrderBySetmealId(id);
         if (orderList == null || orderList.size() == 0) return false;
         return true;
@@ -359,6 +346,19 @@ public class HealthAspect {
         if (!setmeal.getName().equals(old_setmeal.getName())) return true;
         if (!setmeal.getPrice().equals(old_setmeal.getPrice())) return true;
         if (!setmeal.getSex().equals(old_setmeal.getSex())) return true;
+        return false;
+    }
+
+    /**
+     * 判断异常种类
+     *
+     * @param throwable
+     * @return
+     */
+    public Boolean isHealthException(Throwable throwable) {
+        if (throwable != null) {
+            if (throwable.getClass().equals(HealthException.class)) return true;
+        }
         return false;
     }
 }

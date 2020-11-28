@@ -14,6 +14,10 @@ import com.cherish.health.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
 /**
  * @author Cherish
  * @version 1.8.0_121
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service(interfaceClass = OrderService.class)
 public class OrderServiceImpl implements OrderService {
+
     @Autowired
     private OrderSettingDao orderSettingDao;
     @Autowired
@@ -43,6 +48,14 @@ public class OrderServiceImpl implements OrderService {
         OrderSetting orderSetting = orderSettingDao.findByOrderDate(orderInfo.getOrderDate());
         // 不存在预约设置信息 就报错
         if (orderSetting == null) throw new HealthException("很抱歉,所选日期不能预约");
+        /*
+         *  准备预约信息录入
+         *  判断是否 预约已满
+         * */
+        int number = orderSetting.getNumber(); //  可预约总数
+        int reservations = orderSetting.getReservations(); // 已预约数
+        // 预约数已满 报错
+        if (number <= reservations) throw new HealthException(MessageConstant.ORDER_FULL);
 
         /*
          * 判断是否为会员
@@ -50,10 +63,10 @@ public class OrderServiceImpl implements OrderService {
         Member member = memberDao.findByPhoneNumber(orderInfo.getTelephone());
         if (member == null) {
             // 不是会员 将该用户信息录入到会员中
+            orderInfo.setPassword(orderInfo.getIdCard().substring(orderInfo.getIdCard().length() - 6)); // 设置初始密码
             memberDao.add(orderInfo);
         } else {
             // 是会员 获取会员 id
-//            System.out.println(member.getId());
             orderInfo.setMemberId(member.getId());
         }
         /*
@@ -63,26 +76,22 @@ public class OrderServiceImpl implements OrderService {
         // 重复预约 报错
         if (order != null) throw new HealthException(MessageConstant.HAS_ORDERED);
 
-        /*
-         *  准备预约信息录入
-         *  判断是否 预约已满
-         * */
-        int number = orderSetting.getNumber(); //  可预约总数
-        int reservations = orderSetting.getReservations(); // 已预约数
-        // 预约数已满 报错
-        if (number <= reservations) throw new HealthException(MessageConstant.ORDER_FULL);
         orderInfo.setOrderStatus(Order.ORDERSTATUS_NO);
+
+        /**
+         * 预约之前 要修改已预约数
+         */
+        int update = orderSettingDao.updateByOrderDate(orderInfo.getOrderDate());
+        if (update == 0) throw new HealthException(MessageConstant.ORDER_FULL);
+        //  生成订单 添加订单信息
         orderDao.addOrder(orderInfo);
+
         /**
          * 判断是否预约成功
          */
         Order order1 = orderDao.findById(orderInfo.getOrderId());
         if (order1 == null) throw new HealthException(MessageConstant.ORDER_FAIL);
 
-        /**
-         * 预约成功 要修改已预约数
-         */
-        orderSettingDao.updateByOrderDate(order1.getOrderDate());
         // 预约成功
         return order1;
     }
@@ -94,7 +103,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderInfo findById(Integer id) {
+    public Map findById(Integer id) {
         return orderDao.findOrderInfoByOrderId(id);
     }
+
 }

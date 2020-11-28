@@ -3,6 +3,8 @@ package com.cherish.health.dao;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.OrderInfo;
 
+import java.util.Map;
+
 /**
  * @author Cherish
  * @version 1.8.0_121
@@ -21,5 +23,5 @@ public interface OrderDao {
      * @param id
      * @return
      */
-    OrderInfo findOrderInfoByOrderId(Integer id);
+    Map findOrderInfoByOrderId(Integer id);
 }

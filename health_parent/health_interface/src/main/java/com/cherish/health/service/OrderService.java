@@ -4,6 +4,8 @@ import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.OrderInfo;
 
+import java.util.Map;
+
 /**
  * @author Cherish
  * @version 1.8.0_121
@@ -24,5 +26,5 @@ public interface OrderService {
      * @param id
      * @return
      */
-    OrderInfo findById(Integer id);
+    Map<String, Object> findById(Integer id);
 }

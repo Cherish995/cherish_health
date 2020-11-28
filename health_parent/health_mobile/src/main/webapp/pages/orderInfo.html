@@ -39,7 +39,9 @@
             <div class="project-text">
                 <h4 class="tit">{{setmeal.name}}</h4>
                 <p class="subtit">{{setmeal.remark}}</p>
-                <p class="keywords"><span>女</span><span>20-70</span></p>
+                <p class="keywords">
+                    <span>{{setmeal.sex == '0' ? '性别不限' : setmeal.sex == '1' ? '男':'女'}}</span>
+                    <span>{{setmeal.age}}</span>
             </div>
             <div class="project-know">
                 <a href="orderNotice.html" class="link-page">

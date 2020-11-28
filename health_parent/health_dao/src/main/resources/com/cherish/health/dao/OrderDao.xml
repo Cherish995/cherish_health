@@ -18,9 +18,9 @@
     <select id="findById" parameterType="int" resultType="Order">
         select * from t_order where id = #{id}
     </select>
-    <select id="findOrderInfoByOrderId" parameterType="int" resultType="OrderInfo">
+    <select id="findOrderInfoByOrderId" parameterType="int" resultType="map">
         select
-          o.id orderId,o.orderDate,o.orderType,m.name,m.id memberId,s.name setmeal
+         o.orderType,DATE_FORMAT(o.orderDate,'%Y-%m-%d') orderDate,m.name name,s.name setmeal
         from
           t_order o,t_member m,t_setmeal s
         where

@@ -47,5 +47,5 @@ public interface OrderSettingDao {
      *
      * @param orderDate
      */
-    void updateByOrderDate(Date orderDate);
+    int updateByOrderDate(Date orderDate);
 }

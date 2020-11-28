@@ -71,14 +71,12 @@
                 if (response.data.flag) {
                     this.orderInfo = response.data.data;
                 } else {
-                    this.$message({
-                        type: "error",
-                        message: response.data.message,
-                        showClose: true
-                    })
+                    alert(response.data.message)
                 }
             });
         }
     });
+
 </script>
+
 </html>

@@ -4,9 +4,11 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.constant.RedisMessageConstant;
 import com.cherish.health.entity.Result;
+import com.cherish.health.exception.HealthException;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.OrderInfo;
 import com.cherish.health.service.OrderService;
+import com.cherish.health.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Cherish
@@ -38,9 +41,16 @@ public class OrderController {
      * @return
      */
     @PostMapping("/submit")
-    public Result submitOrder(@RequestBody OrderInfo orderInfo) throws Exception {
+    public Result submitOrder(@RequestBody OrderInfo orderInfo) {
 
         if (orderInfo != null) {
+            Date orderDate = orderInfo.getOrderDate();
+            if (orderDate == null) throw new HealthException("日期为空");
+            try {
+                DateUtils.parseDate2String(orderDate);
+            } catch (Exception e) {
+                throw new HealthException("日期格式错误");
+            }
             // 获取真实发送到用户手机验证码
             Jedis jedis = jedisPool.getResource();
             String code = jedis.get(RedisMessageConstant.SENDTYPE_ORDER + "-" + orderInfo.getTelephone());
@@ -64,6 +74,7 @@ public class OrderController {
         return new Result(false, "系统异常," + MessageConstant.ORDER_FAIL);
     }
 
+
     /**
      * 预约信息显示
      *
@@ -72,7 +83,7 @@ public class OrderController {
      */
     @PostMapping("/findById")
     public Result findById(Integer id) {
-        OrderInfo orderInfo = orderService.findById(id);
+        Map<String, Object> orderInfo = orderService.findById(id);
         return new Result(true, MessageConstant.QUERY_ORDER_SUCCESS, orderInfo);
     }
 }

@@ -32,4 +32,6 @@ public class OrderInfo implements Serializable {
     private Date registerDate; // 注册日期
     private String orderStatus; // 预约状态
     private String setmeal; // 套餐信息
+    private String password; // 用户初始密码
+    private String dateStr;// 格式化时间
 }

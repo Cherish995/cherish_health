@@ -52,6 +52,7 @@ public class HealthAspect {
             // 拿到id
             Integer id = (Integer) args[0];
             if (id == null) throw new RuntimeException("严重错误!!!");
+            log.error("要删除的检查项id:{}", id);
             // 判断是否被订单使用
             if (isCheckItemUsed(id)) throw new HealthException("已被订单使用,删除失败");
             return joinPoint.proceed();

@@ -222,7 +222,7 @@ public class DateUtils {
         Calendar c = new GregorianCalendar();
         c.setFirstDayOfWeek(Calendar.SUNDAY);
         c.setTime(date);
-        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 1);
         return c.getTime();
     }
 
@@ -237,8 +237,10 @@ public class DateUtils {
         c.setFirstDayOfWeek(Calendar.SUNDAY);
         c.setTime(date);
         c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + 6);
+        c.add(Calendar.DAY_OF_MONTH, 1);
         return c.getTime();
     }
+
     //获得上周一的日期
     public static Date geLastWeekMonday(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -274,14 +276,14 @@ public class DateUtils {
     }
 
     //获得今天日期
-    public static Date getToday(){
+    public static Date getToday() {
         return new Date();
     }
 
     //获得本月一日的日期
-    public static Date getFirstDay4ThisMonth(){
+    public static Date getFirstDay4ThisMonth() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
     }
 

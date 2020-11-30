@@ -21,4 +21,19 @@
         insert into t_member(phoneNumber,regTime,remark)
         values (#{phoneNumber},#{regTime},#{remark})
     </insert>
+    <select id="findMembersByMonth" parameterType="string" resultType="int">
+        select count(1) from t_member where regTime like #{date}
+    </select>
+    <select id="findMembersByToday" parameterType="string" resultType="int">
+        SELECT count(1) FROM t_member WHERE regTime = #{today}
+    </select>
+    <select id="findTotalMembers" resultType="int">
+        select count(1) from t_member
+    </select>
+    <select id="findThisWeekMembers" resultType="int">
+        select count(1) from t_member where regTime between #{monday} and #{today}
+    </select>
+    <select id="findThisMonthMembers" parameterType="string" resultType="int">
+        select count(1) from t_member where regTime like #{date}
+    </select>
 </mapper>

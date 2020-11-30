@@ -6,6 +6,7 @@ import com.cherish.health.pojo.Setmeal;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Cherish
@@ -118,4 +119,19 @@ public interface SetmealDao {
      * @return
      */
     List<Order> findOrderBySetmealId(Integer id);
+
+    /**
+     * 查询所有套餐名字以及对应的订单数量
+     *
+     * @return
+     */
+    List<Map<String, Integer>> findOrdersBySetmeal();
+
+    /**
+     * 热门套餐信息
+     *
+     * @return
+     */
+    List<Map<String, Object>> findHotSetmeal();
+
 }

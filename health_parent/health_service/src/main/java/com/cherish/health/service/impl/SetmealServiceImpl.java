@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Cherish
@@ -170,5 +171,15 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public List<Order> findOrderBySetmealId(Integer id) {
         return setmealDao.findOrderBySetmealId(id);
+    }
+
+    /**
+     * 查询所有套餐名字以及对应的订单数量
+     *
+     * @return
+     */
+    @Override
+    public List<Map<String, Integer>> findOrdersBySetmeal() {
+        return setmealDao.findOrdersBySetmeal();
     }
 }

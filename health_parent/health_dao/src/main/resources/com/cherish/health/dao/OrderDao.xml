@@ -26,5 +26,22 @@
         where
           m.id=o.member_id and o.setmeal_id = s.id and o.id = #{id}
     </select>
-
+    <select id="findTodayOrderNumber" parameterType="string" resultType="int">
+        select count(1) from t_order where orderDate = #{today}
+    </select>
+    <select id="findTodayVisitsNumber" parameterType="string" resultType="int">
+        select count(1) from t_order where orderDate=#{today} and orderStatus=#{status}
+    </select>
+    <select id="findThisWeekVisitsNumber" parameterType="string" resultType="int">
+        select count(1) from t_order where orderDate between #{monday} and #{today} and orderStatus = #{status}
+    </select>
+    <select id="findThisMonthOrderNumber" parameterType="string" resultType="int">
+        select count(1) from t_order where orderDate like #{month}
+    </select>
+    <select id="findThisMonthVisitsNumber" parameterType="string" resultType="int">
+        select count(1) from t_order where orderStatus = #{status} and orderDate like #{date}
+    </select>
+    <select id="findThisWeekOrderNumber" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM t_order WHERE orderDate between #{monday} and #{sunday}
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Cherish
@@ -94,4 +95,12 @@ public interface SetmealService {
      * @return
      */
     List<Order> findOrderBySetmealId(Integer id);
+
+    /**
+     * 查询所有套餐名字以及对应的订单数量
+     *
+     * @return
+     */
+    List<Map<String, Integer>> findOrdersBySetmeal();
+
 }

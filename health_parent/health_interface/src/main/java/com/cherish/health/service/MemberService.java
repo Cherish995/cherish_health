@@ -2,6 +2,8 @@ package com.cherish.health.service;
 
 import com.cherish.health.pojo.Member;
 
+import java.util.List;
+
 /**
  * @author Cherish
  * @version 1.8.0_121
@@ -16,5 +18,18 @@ public interface MemberService {
      */
     Member findByPhone(String telephone);
 
+    /**
+     * 注册会员
+     *
+     * @param member
+     */
     void register(Member member);
+
+    /**
+     * 根据时间查询会员数
+     *
+     * @param dateList
+     * @return
+     */
+    List<Integer> findMembersByMonth(List<String> dateList);
 }

@@ -75,15 +75,15 @@
     </select>
     <resultMap id="Detail" type="setmeal">
         <id property="id" column="id"/>
-        <result property="name" column="name" />
-        <result property="code" column="code" />
-        <result property="helpCode" column="helpCode" />
-        <result property="sex" column="sex" />
-        <result property="age" column="age" />
-        <result property="price" column="price" />
-        <result property="remark" column="remark" />
-        <result property="attention" column="attention" />
-        <result property="img" column="img" />
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="helpCode" column="helpCode"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="price" column="price"/>
+        <result property="remark" column="remark"/>
+        <result property="attention" column="attention"/>
+        <result property="img" column="img"/>
         <collection property="checkGroups" ofType="CheckGroup">
             <id property="id" column="checkgroup_id"/>
             <result property="name" column="checkgroup_name"/>
@@ -94,4 +94,21 @@
             </collection>
         </collection>
     </resultMap>
+    <select id="findOrdersBySetmeal" resultType="map">
+        select
+          s.name,t.value
+        from
+          t_setmeal s, (select setmeal_id,count(1) value from t_order group by setmeal_id) t
+        where
+          s.id=t.setmeal_id
+    </select>
+    <select id="findHotSetmeal" resultType="map">
+      SELECT
+        s.name, COUNT(o.id) setmeal_count, COUNT(o.id)/(SELECT COUNT(id) FROM t_order ) proportion
+      FROM
+        t_setmeal s, t_order o WHERE s.id = o.setmeal_id
+      GROUP BY s.name
+      ORDER BY  setmeal_count DESC
+      LIMIT 0,4
+    </select>
 </mapper>

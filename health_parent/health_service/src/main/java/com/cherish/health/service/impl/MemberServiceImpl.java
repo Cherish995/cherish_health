@@ -6,6 +6,9 @@ import com.cherish.health.pojo.Member;
 import com.cherish.health.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Cherish
  * @version 1.8.0_121
@@ -36,5 +39,22 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void register(Member member) {
         memberDao.register(member);
+    }
+
+    /**
+     * 根据时间查询会员数
+     *
+     * @param dateList
+     * @return
+     */
+    @Override
+    public List<Integer> findMembersByMonth(List<String> dateList) {
+        if (dateList == null) return null;
+        List<Integer> members = new ArrayList<>();
+        for (String date : dateList) {
+            date += "%";
+            members.add(memberDao.findMembersByMonth(date));
+        }
+        return members;
     }
 }

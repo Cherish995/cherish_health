@@ -22,6 +22,8 @@
             padding: 0;
         }
     </style>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../js/vue.js"></script>
 </head>
 <body class="hold-transition skin-purple sidebar-mini">
 <div id="app">
@@ -173,9 +175,21 @@
                     "children": [//是否有子菜单，若没有，则为[]
                         {
                             "path": "/5-1",
-                            "title": "工作量统计",
-                            "linkUrl": "all-medical-list.html",
-                            "children": []
+                            "title": "会员数量统计",
+                            "linkUrl":"report_member.html",
+                            "children":[]
+                        },
+                        {
+                            "path": "/5-2",
+                            "title": "预约套餐占比统计",
+                            "linkUrl":"report_setmeal.html",
+                            "children":[]
+                        },
+                        {
+                            "path": "/5-3",
+                            "title": "运营数据统计",
+                            "linkUrl":"report_business.html",
+                            "children":[]
                         }
                     ]
                 }

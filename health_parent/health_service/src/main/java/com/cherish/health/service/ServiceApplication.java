@@ -8,6 +8,9 @@ import java.io.IOException;
  * @author Cherish
  * @version 1.8.0_121
  * @date 2020/11/21
+ * <p>
+ *     注册服务
+ * </p>
  */
 public class ServiceApplication {
     public static void main(String[] args) throws IOException {

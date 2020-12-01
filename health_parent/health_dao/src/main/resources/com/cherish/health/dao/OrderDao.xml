@@ -20,7 +20,7 @@
     </select>
     <select id="findOrderInfoByOrderId" parameterType="int" resultType="map">
         select
-         o.orderType,DATE_FORMAT(o.orderDate,'%Y-%m-%d') orderDate,m.name name,s.name setmeal
+         o.orderType,DATE_FORMAT(o.orderDate,'%Y-%m-%d') orderDate,m.name name,s.name setmeal,o.setmeal_id
         from
           t_order o,t_member m,t_setmeal s
         where

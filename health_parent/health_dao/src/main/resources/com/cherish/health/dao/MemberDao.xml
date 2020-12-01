@@ -22,7 +22,7 @@
         values (#{phoneNumber},#{regTime},#{remark})
     </insert>
     <select id="findMembersByMonth" parameterType="string" resultType="int">
-        select count(1) from t_member where regTime like #{date}
+        select count(1) from t_member where regTime &lt;= #{date}
     </select>
     <select id="findMembersByToday" parameterType="string" resultType="int">
         SELECT count(1) FROM t_member WHERE regTime = #{today}

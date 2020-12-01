@@ -104,11 +104,14 @@
     </select>
     <select id="findHotSetmeal" resultType="map">
       SELECT
-        s.name, COUNT(o.id) setmeal_count, COUNT(o.id)/(SELECT COUNT(id) FROM t_order ) proportion
+	      s.name,s.remark,t.c,t.c/t2.total proportion
       FROM
-        t_setmeal s, t_order o WHERE s.id = o.setmeal_id
-      GROUP BY s.name
-      ORDER BY  setmeal_count DESC
+	    (SELECT setmeal_id,count(1) c FROM t_order GROUP BY setmeal_id) t,
+	    (SELECT count(1) total FROM t_order) t2,
+	    t_setmeal s
+      WHERE
+	    t.setmeal_id = s.id
+      ORDER BY t.c DESC
       LIMIT 0,4
     </select>
 </mapper>

@@ -52,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         if (dateList == null) return null;
         List<Integer> members = new ArrayList<>();
         for (String date : dateList) {
-            date += "%";
+            date += "-31";
             members.add(memberDao.findMembersByMonth(date));
         }
         return members;

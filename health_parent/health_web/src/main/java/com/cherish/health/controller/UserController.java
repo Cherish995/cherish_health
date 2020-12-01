@@ -31,4 +31,13 @@ public class UserController {
         // 响应用户名
         return new Result(true, MessageConstant.GET_USERNAME_SUCCESS, username);
     }
+    @RequestMapping("/loginSuccess")
+    public Result loginSuccess(){
+        return new Result(true, MessageConstant.LOGIN_SUCCESS);
+    }
+
+    @RequestMapping("/loginFail")
+    public Result loginFail(){
+        return new Result(false, MessageConstant.LOGIN_FAIL);
+    }
 }

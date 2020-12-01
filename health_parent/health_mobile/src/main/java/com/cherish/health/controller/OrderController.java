@@ -5,18 +5,23 @@ import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.constant.RedisMessageConstant;
 import com.cherish.health.entity.Result;
 import com.cherish.health.exception.HealthException;
-import com.cherish.health.pojo.Order;
-import com.cherish.health.pojo.OrderInfo;
+import com.cherish.health.pojo.*;
 import com.cherish.health.service.OrderService;
+import com.cherish.health.service.SetmealService;
 import com.cherish.health.utils.DateUtils;
+
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.util.Date;
 import java.util.Map;
 
@@ -33,6 +38,9 @@ public class OrderController {
 
     @Reference
     private OrderService orderService;
+
+    @Reference
+    private SetmealService setmealService;
 
     /**
      * 预约确认
@@ -85,5 +93,87 @@ public class OrderController {
     public Result findById(Integer id) {
         Map<String, Object> orderInfo = orderService.findById(id);
         return new Result(true, MessageConstant.QUERY_ORDER_SUCCESS, orderInfo);
+    }
+
+    @GetMapping("/exportSetmealInfo")
+    public void exportSetmealInfo(Integer id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 根据id查询预约订单信息
+        Map<String, Object> map = orderService.findById(id);
+        // 获取套餐id
+        Integer setmeal_id = (Integer) map.get("setmeal_id");
+        String name = (String) map.get("name");
+        // 根据套餐id查询套餐详情
+        Setmeal setmeal = setmealService.findByDetailId(setmeal_id);
+
+        // 下载导出
+        // 设置头信息
+        response.setContentType("application/pdf");
+        String filename = name + ":预约订单信息.pdf"; // 文件名
+        // 解决下载的文件名 中文乱码
+        filename = new String(filename.getBytes(), "ISO-8859-1");
+
+        // 设置以附件的形式导出
+        response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+
+        // 生成PDF文件
+        Document document = new Document();
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+        // 设置表格字体
+        BaseFont cn = BaseFont.createFont("STSongStd-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        Font font = new Font(cn, 10, Font.NORMAL, Color.BLUE);
+
+        // 写出PDF数据
+        document.add(new Paragraph("体检人：" + (String) map.get("name"), font));
+        document.add(new Paragraph("体检套餐：" + (String) map.get("setmeal"), font));
+        document.add(new Paragraph("体检日期：" + (String) map.get("orderDate"), font));
+        document.add(new Paragraph("预约类型：" + (String) map.get("orderType"), font));
+
+        //  生成3列表格
+        Table table = new Table(3);//创建3列的表格
+        // 设置样式
+        setTableFont(table);
+        // 设置表头信息
+        table.addCell(buildCell("项目名称", font));
+        table.addCell(buildCell("项目内容", font));
+        table.addCell(buildCell("项目解读", font));
+        // 写数据
+        for (CheckGroup checkGroup : setmeal.getCheckGroups()) {
+            table.addCell(buildCell(checkGroup.getName(), font));
+            // 组织检查项集合
+            StringBuffer checkItems = new StringBuffer();
+            for (CheckItem checkItem : checkGroup.getCheckItems()) {
+                checkItems.append(checkItem.getName() + "  ");
+            }
+            table.addCell(buildCell(checkItems.toString(), font));
+            table.addCell(buildCell(checkGroup.getRemark(), font));
+        }
+        // 将表格加入文档
+        document.add(table);
+        document.close();
+
+    }
+
+    // 传递内容和字体样式，生成单元格
+    private Cell buildCell(String content, Font font) throws BadElementException {
+        Phrase phrase = new Phrase(content, font);
+        return new Cell(phrase);
+    }
+
+    /**
+     * 设置表格样式
+     *
+     * @param table
+     */
+    private void setTableFont(Table table) {
+        table.setWidth(80); // 宽度
+        table.setBorder(1); // 边框
+        table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER); //水平对齐方式
+        table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP); // 垂直对齐方式
+        /*设置表格属性*/
+        table.setBorderColor(new Color(0, 0, 255)); //将边框的颜色设置为蓝色
+        table.setPadding(5);//设置表格与字体间的间距
+        //table.setSpacing(5);//设置表格上下的间距
+        table.setAlignment(Element.ALIGN_CENTER);//设置字体显示居中样式
     }
 }

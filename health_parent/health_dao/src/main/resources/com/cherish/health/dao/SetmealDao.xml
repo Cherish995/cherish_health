@@ -104,7 +104,7 @@
     </select>
     <select id="findHotSetmeal" resultType="map">
       SELECT
-	      s.name,s.remark,t.c,t.c/t2.total proportion
+	      s.name,s.remark,t.c setmeal_count,t.c/t2.total proportion
       FROM
 	    (SELECT setmeal_id,count(1) c FROM t_order GROUP BY setmeal_id) t,
 	    (SELECT count(1) total FROM t_order) t2,

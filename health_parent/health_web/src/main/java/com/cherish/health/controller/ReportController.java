@@ -6,6 +6,11 @@ import com.cherish.health.entity.Result;
 import com.cherish.health.service.MemberService;
 import com.cherish.health.service.ReportService;
 import com.cherish.health.service.SetmealService;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -104,6 +110,12 @@ public class ReportController {
         return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS, resultMap);
     }
 
+    /**
+     * 导出execl
+     *
+     * @param req
+     * @param res
+     */
     @GetMapping("/exportBusinessReport")
     public void exportBusinessReport(HttpServletRequest req, HttpServletResponse res) {
         // 获取模板的路径, getRealPath("/") 相当于到webapp目录下
@@ -160,5 +172,36 @@ public class ReportController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 导出PDF
+     */
+    @GetMapping("/exportBusinessReportPDF")
+    public Result exportBusinessReportPDF(HttpServletRequest request, HttpServletResponse response) {
+        // 获取PDF模板文件 所在目录路径
+        String path = request.getSession().getServletContext().getRealPath("/template");
+        String jrxml = path + File.separator + "health_business3.jrxml";
+        String jasper = path + File.separator + "health_business3.jasper";
+
+        try {
+            // 编译模板
+            JasperCompileManager.compileReportToFile(jrxml, jasper);
+            // 拿到运营数据
+            Map<String, Object> businessReport = reportService.getBusinessReportData();
+            // 拿到热门套餐数据
+            List<Map<String, Object>> hotSetmeal = (List<Map<String, Object>>) businessReport.get("hotSetmeal");
+
+            // 填充数据
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasper, businessReport, new JRBeanCollectionDataSource(hotSetmeal));
+            // 设置响应的数据为pdf
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachement;filename=businessReport.pdf");
+            JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(false, "导出运营数据统计PDF失败");
     }
 }

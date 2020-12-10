@@ -28,4 +28,5 @@ public class QueryPageBean implements Serializable {
     public Integer getOffset() {
         return (currentPage - 1) * pageSize;
     }
+
 }

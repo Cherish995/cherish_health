@@ -100,7 +100,6 @@ public class CheckGroupController {
     public Result delete(Integer id) {
         checkGroupService.deleteById(id);
         return new Result(true, MessageConstant.DELETE_CHECKGROUP_SUCCESS);
-
     }
 
     /**

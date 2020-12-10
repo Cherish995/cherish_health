@@ -16,6 +16,7 @@ public interface MessageConstant {
     static final String EDIT_CHECKITEM_FAIL = "编辑检查项失败";
     static final String EDIT_CHECKITEM_SUCCESS = "编辑检查项成功";
     static final String QUERY_CHECKITEM_SUCCESS = "查询检查项成功";
+    static final String QUERY_MENU_SUCCESS = "查询菜单列表成功";
     static final String QUERY_CHECKITEM_FAIL = "查询检查项失败";
     static final String UPLOAD_SUCCESS = "上传成功";
     static final String ADD_CHECKGROUP_FAIL = "新增检查组失败";

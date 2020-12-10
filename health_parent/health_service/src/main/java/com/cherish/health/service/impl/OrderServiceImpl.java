@@ -5,7 +5,7 @@ import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.dao.MemberDao;
 import com.cherish.health.dao.OrderDao;
 import com.cherish.health.dao.OrderSettingDao;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.Member;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.OrderInfo;
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
          */
         OrderSetting orderSetting = orderSettingDao.findByOrderDate(orderInfo.getOrderDate());
         // 不存在预约设置信息 就报错
-        if (orderSetting == null) throw new HealthException("很抱歉,所选日期不能预约");
+        if (orderSetting == null) throw new MyException("很抱歉,所选日期不能预约");
         /*
          *  准备预约信息录入
          *  判断是否 预约已满
@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
         int number = orderSetting.getNumber(); //  可预约总数
         int reservations = orderSetting.getReservations(); // 已预约数
         // 预约数已满 报错
-        if (number <= reservations) throw new HealthException(MessageConstant.ORDER_FULL);
+        if (number <= reservations) throw new MyException(MessageConstant.ORDER_FULL);
 
         /*
          * 判断是否为会员
@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
          * */
         Order order = orderDao.findOrder(orderInfo);
         // 重复预约 报错
-        if (order != null) throw new HealthException(MessageConstant.HAS_ORDERED);
+        if (order != null) throw new MyException(MessageConstant.HAS_ORDERED);
 
         orderInfo.setOrderStatus(Order.ORDERSTATUS_NO);
 
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
          * 预约之前 要修改已预约数
          */
         int update = orderSettingDao.updateByOrderDate(orderInfo.getOrderDate());
-        if (update == 0) throw new HealthException(MessageConstant.ORDER_FULL);
+        if (update == 0) throw new MyException(MessageConstant.ORDER_FULL);
         //  生成订单 添加订单信息
         orderDao.addOrder(orderInfo);
 
@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
          * 判断是否预约成功
          */
         Order order1 = orderDao.findById(orderInfo.getOrderId());
-        if (order1 == null) throw new HealthException(MessageConstant.ORDER_FAIL);
+        if (order1 == null) throw new MyException(MessageConstant.ORDER_FAIL);
 
         // 预约成功
         return order1;

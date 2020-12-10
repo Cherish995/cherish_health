@@ -23,6 +23,7 @@ public class Menu implements Serializable {
     private String icon;//图标
     private Set<Role> roles = new HashSet<Role>(0);//角色集合
     private List<Menu> children = new ArrayList<>();//子菜单集合
+    private Integer level; // 菜单等级
     private Integer parentMenuId;//父菜单id
 
 }

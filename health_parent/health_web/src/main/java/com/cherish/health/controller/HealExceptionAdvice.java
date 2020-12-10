@@ -1,6 +1,6 @@
 package com.cherish.health.controller;
 
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +37,8 @@ public class HealExceptionAdvice {
     /***
      * catch(MyException)
      */
-    @ExceptionHandler(HealthException.class)
-    public Result handleMyException(HealthException e) {
+    @ExceptionHandler(MyException.class)
+    public Result handleMyException(MyException e) {
         return new Result(false, e.getMessage());
     }
 

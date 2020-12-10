@@ -5,7 +5,7 @@ import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.dao.SetmealDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 import com.cherish.health.service.SetmealService;
@@ -116,7 +116,7 @@ public class SetmealServiceImpl implements SetmealService {
         // 判断改套餐是否有对应的订单
         Long total = setmealDao.findOrders(id);
         if (total > 0) {
-            throw new HealthException(MessageConstant.DELETE_SETMEAL_FAIL);
+            throw new MyException(MessageConstant.DELETE_SETMEAL_FAIL);
         }
         // 删除套餐关联检查组信息
         setmealDao.deleteCheckGroupIdsBySetmealId(id);

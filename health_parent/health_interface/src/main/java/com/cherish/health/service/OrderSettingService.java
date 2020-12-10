@@ -1,6 +1,6 @@
 package com.cherish.health.service;
 
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.OrderSetting;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface OrderSettingService {
      *
      * @param orderSettingList
      */
-    void add(List<OrderSetting> orderSettingList) throws HealthException;
+    void add(List<OrderSetting> orderSettingList) throws MyException;
 
     /**
      * 查询所有预约设置
@@ -32,5 +32,5 @@ public interface OrderSettingService {
      *
      * @param orderSetting
      */
-    void update(OrderSetting orderSetting) throws HealthException;
+    void update(OrderSetting orderSetting) throws MyException;
 }

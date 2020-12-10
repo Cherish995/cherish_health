@@ -9,8 +9,8 @@ package com.cherish.health.exception;
  * 自定义异常
  * </p>
  */
-public class HealthException extends RuntimeException {
-    public HealthException(String msg) {
+public class MyException extends RuntimeException {
+    public MyException(String msg) {
         super(msg);
     }
 }

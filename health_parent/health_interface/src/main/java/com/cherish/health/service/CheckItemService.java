@@ -2,7 +2,7 @@ package com.cherish.health.service;
 
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.pojo.Order;
 
@@ -29,7 +29,7 @@ public interface CheckItemService {
      *
      * @param checkItem 检查项信息
      */
-    void add(CheckItem checkItem) throws HealthException;
+    void add(CheckItem checkItem) throws MyException;
 
     /**
      * 分页查询检查项信息
@@ -44,14 +44,14 @@ public interface CheckItemService {
      *
      * @param id 对应检查项的id
      */
-    void deleteById(Integer id) throws HealthException;
+    void deleteById(Integer id) throws MyException;
 
     /**
      * 修改检查项信息
      *
      * @param checkItem 更新的检查项信息
      */
-    void update(CheckItem checkItem) throws HealthException;
+    void update(CheckItem checkItem) throws MyException;
 
     /**
      * 根据id查询检查项信息

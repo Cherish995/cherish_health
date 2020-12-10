@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.constant.RedisMessageConstant;
 import com.cherish.health.entity.Result;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.*;
 import com.cherish.health.service.OrderService;
 import com.cherish.health.service.SetmealService;
@@ -53,11 +53,11 @@ public class OrderController {
 
         if (orderInfo != null) {
             Date orderDate = orderInfo.getOrderDate();
-            if (orderDate == null) throw new HealthException("日期为空");
+            if (orderDate == null) throw new MyException("日期为空");
             try {
                 DateUtils.parseDate2String(orderDate);
             } catch (Exception e) {
-                throw new HealthException("日期格式错误");
+                throw new MyException("日期格式错误");
             }
             // 获取真实发送到用户手机验证码
             Jedis jedis = jedisPool.getResource();
@@ -145,7 +145,8 @@ public class OrderController {
             for (CheckItem checkItem : checkGroup.getCheckItems()) {
                 checkItems.append(checkItem.getName() + "  ");
             }
-            table.addCell(buildCell(checkItems.toString(), font));
+            //  去掉检查项首尾空格
+            table.addCell(buildCell(checkItems.toString().trim(), font));
             table.addCell(buildCell(checkGroup.getRemark(), font));
         }
         // 将表格加入文档
@@ -176,4 +177,5 @@ public class OrderController {
         //table.setSpacing(5);//设置表格上下的间距
         table.setAlignment(Element.ALIGN_CENTER);//设置字体显示居中样式
     }
+
 }

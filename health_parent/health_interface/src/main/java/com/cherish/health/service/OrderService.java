@@ -1,6 +1,6 @@
 package com.cherish.health.service;
 
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.OrderInfo;
 
@@ -18,7 +18,7 @@ public interface OrderService {
      * @param orderInfo
      * @return
      */
-    Order submitOrder(OrderInfo orderInfo) throws HealthException;
+    Order submitOrder(OrderInfo orderInfo) throws MyException;
 
     /**
      * 预约信息显示

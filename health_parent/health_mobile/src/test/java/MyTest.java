@@ -26,4 +26,11 @@ public class MyTest {
         now = calendar.getTime();
         System.out.println(now);
     }
+
+    @Test
+    public void test2(){
+        String  s=" 1  2 3 4 ";
+        String s2 = s.trim();
+        System.out.println("="+s2+"=");
+    }
 }

@@ -2,7 +2,7 @@ package com.cherish.health.service;
 
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.pojo.Setmeal;
 
@@ -28,9 +28,9 @@ public interface SetmealService {
      *
      * @param setmeal
      * @param checkgroupIds
-     * @throws HealthException
+     * @throws MyException
      */
-    Integer add(Setmeal setmeal, Integer[] checkgroupIds) throws HealthException;
+    Integer add(Setmeal setmeal, Integer[] checkgroupIds) throws MyException;
 
     /**
      * 根据id查询套餐数据
@@ -53,17 +53,17 @@ public interface SetmealService {
      *
      * @param setmeal
      * @param checkgroupIds
-     * @throws HealthException
+     * @throws MyException
      */
-    void update(Setmeal setmeal, Integer[] checkgroupIds) throws HealthException;
+    void update(Setmeal setmeal, Integer[] checkgroupIds) throws MyException;
 
     /**
      * 根据id 删除套餐信息
      *
      * @param id
-     * @throws HealthException
+     * @throws MyException
      */
-    void delete(Integer id) throws HealthException;
+    void delete(Integer id) throws MyException;
 
     /**
      * 查询所有的图片名称

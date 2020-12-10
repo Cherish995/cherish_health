@@ -1,6 +1,6 @@
 package com.cherish.health.aspect;
 
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.CheckGroup;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.pojo.Order;
@@ -55,11 +55,11 @@ public class HealthAspect {
 
             log.debug("要删除的检查项id:{}", id);
             // 判断是否被订单使用
-            if (isCheckItemUsed(id)) throw new HealthException("已被订单使用,删除失败");
+            if (isCheckItemUsed(id)) throw new MyException("已被订单使用,删除失败");
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             log.debug(throwable.getMessage());
-            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            if (isHealthException(throwable)) throw new MyException(throwable.getMessage());
             throw new RuntimeException(throwable);
         }
     }
@@ -81,12 +81,12 @@ public class HealthAspect {
             if (id == null) throw new RuntimeException("严重错误!!!");
             // 判断是否被订单使用
             if (isCheckGroupUsed(id)) {
-                throw new HealthException("已被订单使用,删除失败");
+                throw new MyException("已被订单使用,删除失败");
             }
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             log.debug(throwable.getMessage(), throwable);
-            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            if (isHealthException(throwable)) throw new MyException(throwable.getMessage());
             throw new RuntimeException(throwable);
         }
     }
@@ -108,13 +108,13 @@ public class HealthAspect {
             if (id == null) throw new RuntimeException("严重错误!!!");
             // 判断是否被订单使用
             if (isSetmealUsed(id)) {
-                throw new HealthException("已被订单使用,删除失败");
+                throw new MyException("已被订单使用,删除失败");
             }
 
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             log.debug(throwable.getMessage(), throwable);
-            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            if (isHealthException(throwable)) throw new MyException(throwable.getMessage());
             throw new RuntimeException(throwable);
         }
     }
@@ -144,7 +144,7 @@ public class HealthAspect {
                 if (old_checkItem.equals(checkItem)) return -1;
                 else {
                     // 修改了不能暂时修改的数据 抛异常给你
-                    if (isCheckItemUpdate(old_checkItem, checkItem)) throw new HealthException("已有订单,不能更改");
+                    if (isCheckItemUpdate(old_checkItem, checkItem)) throw new MyException("已有订单,不能更改");
                     // 可以修改 执行目标方法
                     return joinPoint.proceed();
                 }
@@ -156,7 +156,7 @@ public class HealthAspect {
         } catch (Throwable throwable) {
             // 将异常自定义处理
             log.debug(throwable.getMessage(), throwable);
-            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            if (isHealthException(throwable)) throw new MyException(throwable.getMessage());
             throw new RuntimeException(throwable);
         }
     }
@@ -195,12 +195,12 @@ public class HealthAspect {
                     if (checkGroup.equals(old_checkGroup)) return -1;
                 } else {
                     // 检查项是不能修改的
-                    throw new HealthException("已有订单使用,修改失败");
+                    throw new MyException("已有订单使用,修改失败");
                 }
                 // 判断更新的内容是否是不能被修改的
                 if (isCheckGroupUpdate(old_checkGroup, checkGroup)) {
                     // 不能修改顾客至上
-                    throw new HealthException("已有订单使用,修改失败");
+                    throw new MyException("已有订单使用,修改失败");
                 }
                 // 你更新吧
                 return joinPoint.proceed();
@@ -212,7 +212,7 @@ public class HealthAspect {
         } catch (Throwable throwable) {
             // 自己处理异常
             log.debug(throwable.getMessage(), throwable);
-            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            if (isHealthException(throwable)) throw new MyException(throwable.getMessage());
             throw new RuntimeException(throwable);
         }
     }
@@ -251,12 +251,12 @@ public class HealthAspect {
                     if (setmeal.equals(old_setmeal)) return -1;
                 } else {
                     // 检查组是不能修改的
-                    throw new HealthException("已有订单使用,修改失败");
+                    throw new MyException("已有订单使用,修改失败");
                 }
                 // 判断更新的内容是否是不能被修改的
                 if (isSetmealUpdate(old_setmeal, setmeal)) {
                     // 不能修改顾客至上
-                    throw new HealthException("已有订单使用,修改失败");
+                    throw new MyException("已有订单使用,修改失败");
                 }
                 // 你更新吧
                 return joinPoint.proceed();
@@ -267,7 +267,7 @@ public class HealthAspect {
         } catch (Throwable throwable) {
             // 自己处理异常
             log.debug(throwable.getMessage(), throwable);
-            if (isHealthException(throwable)) throw new HealthException(throwable.getMessage());
+            if (isHealthException(throwable)) throw new MyException(throwable.getMessage());
             throw new RuntimeException(throwable);
         }
 
@@ -359,7 +359,7 @@ public class HealthAspect {
      */
     public Boolean isHealthException(Throwable throwable) {
         if (throwable != null) {
-            if (throwable.getClass().equals(HealthException.class)) return true;
+            if (throwable.getClass().equals(MyException.class)) return true;
         }
         return false;
     }

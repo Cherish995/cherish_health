@@ -9,6 +9,7 @@
     <security:http pattern="/img/**" security="none"/>
     <security:http pattern="/js/**" security="none"/>
     <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/user/loginFail.do" security="none"/>
 
     <security:http auto-config="true" use-expressions="true">
 

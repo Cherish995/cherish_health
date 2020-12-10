@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 /**
  * @author Cherish
  * @version 1.8.0_121
@@ -31,13 +33,15 @@ public class UserController {
         // 响应用户名
         return new Result(true, MessageConstant.GET_USERNAME_SUCCESS, username);
     }
+
     @RequestMapping("/loginSuccess")
-    public Result loginSuccess(){
+    public Result loginSuccess() {
         return new Result(true, MessageConstant.LOGIN_SUCCESS);
     }
 
     @RequestMapping("/loginFail")
-    public Result loginFail(){
+    public Result loginFail() {
         return new Result(false, MessageConstant.LOGIN_FAIL);
     }
+
 }

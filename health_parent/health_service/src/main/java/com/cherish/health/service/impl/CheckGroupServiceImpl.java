@@ -8,7 +8,7 @@ import com.cherish.health.entity.QueryPageBean;
 import com.cherish.health.pojo.CheckGroup;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.service.CheckGroupService;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -124,7 +124,7 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         Long total = checkGroupDao.findSetmeal(id);
         if (total > 0) {
             // 亲 不能删除哦
-            throw new HealthException(MessageConstant.DELETE_CHECKGROUP_FAIL);
+            throw new MyException(MessageConstant.DELETE_CHECKGROUP_FAIL);
         }
         // 删除啦
         checkGroupDao.deleteCheckGroupAndCheckItemById(id);

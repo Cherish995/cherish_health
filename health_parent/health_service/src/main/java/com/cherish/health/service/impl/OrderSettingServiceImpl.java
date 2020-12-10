@@ -2,7 +2,7 @@ package com.cherish.health.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.cherish.health.dao.OrderSettingDao;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.OrderSetting;
 import com.cherish.health.service.OrderSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
                     // 存在 判断是否能更新
                     if (os.getReservations() > orderSetting.getNumber())
                         // 不可更新
-                        throw new HealthException("可预约数不能小已预约数");
+                        throw new MyException("可预约数不能小已预约数");
                     // 可以更新
                     orderSettingDao.update(orderSetting);
                 } else
@@ -76,7 +76,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
             // 判断更新后的最大预约数是否大等于已预约人数
             if (orderSetting.getNumber() < old_orderSetting.getReservations()) {
                 // 报错 已预约数超过最大预约数，接口异常声明
-                throw new HealthException("可预约数不能小于已预约数】");
+                throw new MyException("可预约数不能小于已预约数】");
             }
             // 可以更新最大预约数
             orderSettingDao.update(orderSetting);

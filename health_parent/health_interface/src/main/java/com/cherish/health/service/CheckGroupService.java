@@ -2,7 +2,7 @@ package com.cherish.health.service;
 
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.CheckGroup;
 import com.cherish.health.pojo.Order;
 
@@ -23,7 +23,7 @@ public interface CheckGroupService {
      * @param checkGroup
      * @param checkitemIds
      */
-    void add(CheckGroup checkGroup, Integer[] checkitemIds) throws HealthException;
+    void add(CheckGroup checkGroup, Integer[] checkitemIds) throws MyException;
 
     /**
      * 根据id查询检查组信息
@@ -55,14 +55,14 @@ public interface CheckGroupService {
      * @param checkGroup
      * @param checkitemIds
      */
-    void update(CheckGroup checkGroup, Integer[] checkitemIds) throws HealthException;
+    void update(CheckGroup checkGroup, Integer[] checkitemIds) throws MyException;
 
     /**
      * 根据id 删除监察组数据
      *
      * @param id
      */
-    void deleteById(Integer id) throws HealthException;
+    void deleteById(Integer id) throws MyException;
 
     /**
      * 查询所有检查组列表集合

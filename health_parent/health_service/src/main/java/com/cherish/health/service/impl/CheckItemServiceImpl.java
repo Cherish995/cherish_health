@@ -5,7 +5,7 @@ import com.cherish.health.constant.MessageConstant;
 import com.cherish.health.dao.CheckItemDao;
 import com.cherish.health.entity.PageResult;
 import com.cherish.health.entity.QueryPageBean;
-import com.cherish.health.exception.HealthException;
+import com.cherish.health.exception.MyException;
 import com.cherish.health.pojo.CheckItem;
 import com.cherish.health.pojo.Order;
 import com.cherish.health.service.CheckItemService;
@@ -74,7 +74,7 @@ public class CheckItemServiceImpl implements CheckItemService {
         int total = checkItemDao.findByCheckItemIdAndCheckGroupCount(id);
         if (total > 0) {
             // 不可以删除
-            throw new HealthException(MessageConstant.DELETE_CHECKITEM_FAIL);
+            throw new MyException(MessageConstant.DELETE_CHECKITEM_FAIL);
         } else {
             // 可以删除
             checkItemDao.deleteById(id);
